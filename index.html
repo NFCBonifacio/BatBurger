@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🦇 BatBurger - O Melhor Hambúrguer de Gotham</title>
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Cabeçalho -->
+    <!-- Cabeçalho com Logo do Batman -->
     <header>
         <div class="bat-logo">
             <img src="https://github.com/NFCBonifacio/BATBURGER/blob/main/transferir.png?raw=true" alt="Batman Logo" width="80">
@@ -17,11 +18,36 @@
         <p>🍔 O único delivery aprovado pelo Cavaleiro das Trevas! 🦇</p>
     </header>
 
+    <!-- Seção de Informações do Cliente -->
+    <div class="customer-info">
+        <h2>📋 SEUS DADOS PARA ENTREGA</h2>
+        <div class="info-form">
+            <div class="form-group">
+                <label for="nome">Seu Nome:</label>
+                <input type="text" id="nome" placeholder="Como devemos chamar você?">
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" placeholder="Rua, Número, Bairro">
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" placeholder="(33) 99999-9999">
+            </div>
+            <button onclick="updateMap()">ATUALIZAR MAPA</button>
+        </div>
+        
+        <div class="map-container">
+            <h3>📍 Confirme seu endereço no mapa:</h3>
+            <div id="map"></div>
+            <p class="map-note">Nosso Batmóvel entregará em toda Nanuque!</p>
+        </div>
+    </div>
+
     <!-- Cardápio -->
     <div class="menu">
         <div class="section-title">
-            <h2>🦇 CARDÁPIO BATBURGER</h2>
-            <p class="notification" id="notification"></p>
+            <h2>🦇 OS HERÓIS DO CARDÁPIO</h2>
         </div>
 
         <!-- Hambúrguer Simples -->
@@ -30,7 +56,7 @@
             <h3>Hambúrguer do Robin</h3>
             <p>Pão, bife, alface, tomate, milho e batata palha.</p>
             <p class="price">R$ 18,90</p>
-            <button onclick="addToCart('Hambúrguer do Robin', 18.90)">ADICIONAR</button>
+            <button onclick="addToCart('Hambúrguer do Robin', 18.90)">PEDIR AGORA</button>
         </div>
 
         <!-- X-Burger -->
@@ -39,7 +65,7 @@
             <h3>X-Batman</h3>
             <p>Pão, bife, queijo, batata palha, milho, alface e tomate.</p>
             <p class="price">R$ 22,90</p>
-            <button onclick="addToCart('X-Batman', 22.90)">ADICIONAR</button>
+            <button onclick="addToCart('X-Batman', 22.90)">PEDIR AGORA</button>
         </div>
 
         <!-- X-Egg -->
@@ -48,7 +74,7 @@
             <h3>X-Egg do Coringa</h3>
             <p>Pão, bife, queijo, ovo, batata palha, milho e tomate.</p>
             <p class="price">R$ 24,90</p>
-            <button onclick="addToCart('X-Egg do Coringa', 24.90)">ADICIONAR</button>
+            <button onclick="addToCart('X-Egg do Coringa', 24.90)">PEDIR AGORA</button>
         </div>
 
         <!-- X-Bacon -->
@@ -57,7 +83,7 @@
             <h3>X-Bacon do Alfred</h3>
             <p>Pão, bife, queijo, bacon, batata palha, milho, alface e tomate.</p>
             <p class="price">R$ 26,90</p>
-            <button onclick="addToCart('X-Bacon do Alfred', 26.90)">ADICIONAR</button>
+            <button onclick="addToCart('X-Bacon do Alfred', 26.90)">PEDIR AGORA</button>
         </div>
 
         <!-- X-Egg Bacon -->
@@ -66,7 +92,7 @@
             <h3>X-Egg Bacon do Asa Noturna</h3>
             <p>Pão, bife, queijo, bacon, ovo, batata palha, milho, alface e tomate.</p>
             <p class="price">R$ 28,90</p>
-            <button onclick="addToCart('X-Egg Bacon do Asa Noturna', 28.90)">ADICIONAR</button>
+            <button onclick="addToCart('X-Egg Bacon do Asa Noturna', 28.90)">PEDIR AGORA</button>
         </div>
 
         <!-- X-Tudo -->
@@ -75,7 +101,7 @@
             <h3>X-Tudo do Cavaleiro das Trevas</h3>
             <p>Pão, bife, calabresa, ovo, bacon, presunto, alface, banana, tomate, milho, batata palha e molho especial.</p>
             <p class="price">R$ 32,90</p>
-            <button onclick="addToCart('X-Tudo do Cavaleiro das Trevas', 32.90)">ADICIONAR</button>
+            <button onclick="addToCart('X-Tudo do Cavaleiro das Trevas', 32.90)">PEDIR AGORA</button>
         </div>
 
         <!-- X-Picanha 90g -->
@@ -84,7 +110,7 @@
             <h3>X-Picanha 90g do Comissário Gordon</h3>
             <p>Pão, bife de picanha 90g, calabresa, ovo, presunto, alface, tomate, milho, banana, batata palha e molho especial.</p>
             <p class="price">R$ 34,90</p>
-            <button onclick="addToCart('X-Picanha 90g do Comissário Gordon', 34.90)">ADICIONAR</button>
+            <button onclick="addToCart('X-Picanha 90g do Comissário Gordon', 34.90)">PEDIR AGORA</button>
         </div>
 
         <!-- X-Picanha 140g -->
@@ -93,7 +119,7 @@
             <h3>X-Picanha 140g do Batman</h3>
             <p>Pão, bife de 140g, presunto, ovo, calabresa, banana, bacon, alface, tomate, milho, batata palha e molho especial.</p>
             <p class="price">R$ 38,90</p>
-            <button onclick="addToCart('X-Picanha 140g do Batman', 38.90)">ADICIONAR</button>
+            <button onclick="addToCart('X-Picanha 140g do Batman', 38.90)">PEDIR AGORA</button>
         </div>
     </div>
 
@@ -102,41 +128,11 @@
         <h2>🛒 SEU PEDIDO</h2>
         <ul id="cart-items"></ul>
         <p id="total">Total: R$ 0,00</p>
+        <button onclick="sendOrder()">🦇 FINALIZAR PEDIDO (WHATSAPP)</button>
     </div>
 
-    <!-- Formulário de Entrega (Agora no final) -->
-    <div class="customer-info">
-        <h2>📋 INFORMAÇÕES PARA ENTREGA</h2>
-        <div class="info-form">
-            <div class="form-group">
-                <label for="nome">Nome Completo*:</label>
-                <input type="text" id="nome" placeholder="Ex: Bruce Wayne" required>
-            </div>
-            <div class="form-group">
-                <label for="telefone">WhatsApp*:</label>
-                <input type="tel" id="telefone" placeholder="(33) 99999-9999" required>
-            </div>
-            <div class="form-group full-width">
-                <label for="endereco">Endereço Completo*:</label>
-                <textarea id="endereco" placeholder="Rua, Número, Bairro, Complemento" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="referencia">Ponto de Referência:</label>
-                <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado X">
-            </div>
-            <div class="form-group">
-                <label for="pagamento">Forma de Pagamento*:</label>
-                <select id="pagamento" required>
-                    <option value="">Selecione...</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="PIX">PIX</option>
-                    <option value="Cartão">Cartão na Entrega</option>
-                </select>
-            </div>
-            <button class="finalizar-btn" onclick="sendOrder()">🦇 FINALIZAR PEDIDO</button>
-        </div>
-    </div>
-
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
