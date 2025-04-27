@@ -104,7 +104,7 @@ function sendOrder() {
     message += `\n💰 *Total: R$ ${total.toFixed(2)}*`;
     message += "\n\n🔔 *Observações:* ________________";
 
-    const whatsappUrl = `https://wa.me/5533991255080?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/5533998351903?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
 }
 
