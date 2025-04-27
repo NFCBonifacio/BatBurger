@@ -1,13 +1,24 @@
 /* Estilo Gotham City */
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #e0e0e0;
+    --gold: #ffd700;
+    --red: #ff5555;
+    --dark-bg: rgba(20, 20, 20, 0.8);
+    --card-bg: rgba(30, 30, 30, 0.9);
+    --border-color: #333;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #0a0a0a;
-    color: #e0e0e0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     background-image: url('https://github.com/NFCBonifacio/BatBurger/blob/main/fundo2.jpg?raw=true');
     background-size: cover;
     background-attachment: fixed;
+    transition: all 0.3s ease;
 }
 
 /* Efeito de névoa */
@@ -22,20 +33,30 @@ body::before {
     z-index: -1;
 }
 
+/* Dark Mode */
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #f0f0f0;
+    --dark-bg: rgba(10, 10, 10, 0.9);
+    --card-bg: rgba(40, 40, 40, 0.95);
+}
+
 /* Cabeçalho */
 header {
     text-align: center;
     padding: 20px;
-    background: rgba(20, 20, 20, 0.8);
-    border-bottom: 3px solid #ffd700;
+    background: var(--dark-bg);
+    border-bottom: 3px solid var(--gold);
+    position: relative;
 }
 
 header h1 {
     font-family: 'Bangers', cursive;
     font-size: 3em;
-    color: #ffd700;
+    color: var(--gold);
     margin: 10px 0;
     letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 header h1 span {
@@ -45,30 +66,56 @@ header h1 span {
 header p {
     font-size: 1.2em;
     margin: 5px 0;
+    color: var(--text-color);
 }
 
 .bat-logo img {
-    filter: drop-shadow(0 0 5px #ffd700);
+    filter: drop-shadow(0 0 5px var(--gold));
+    transition: transform 0.3s;
+}
+
+.bat-logo:hover img {
+    transform: rotate(15deg);
+}
+
+.dark-mode-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    color: var(--gold);
+    border: 2px solid var(--gold);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.dark-mode-btn:hover {
+    background: var(--gold);
+    color: var(--bg-color);
 }
 
 /* Seção de Informações do Cliente */
 .customer-info {
-    background: rgba(30, 30, 30, 0.9);
+    background: var(--card-bg);
     margin: 20px auto;
     padding: 25px;
     width: 90%;
     max-width: 800px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-    border: 2px solid #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    border: 2px solid var(--gold);
 }
 
 .customer-info h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
+    color: var(--gold);
     text-align: center;
     font-size: 1.8em;
     margin-bottom: 20px;
+    letter-spacing: 1px;
 }
 
 .info-form {
@@ -86,16 +133,49 @@ header p {
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: #ffd700;
+    color: var(--gold);
+    font-weight: bold;
 }
 
 .form-group input {
     width: 100%;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #333;
-    background: #1a1a1a;
-    color: white;
+    border: 1px solid var(--border-color);
+    background: var(--dark-bg);
+    color: var(--text-color);
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 5px var(--gold);
+}
+
+.input-with-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.input-with-btn input {
+    flex: 1;
+}
+
+.map-btn {
+    background: var(--dark-bg);
+    color: var(--gold);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.map-btn:hover {
+    background: var(--gold);
+    color: var(--bg-color);
 }
 
 .map-container {
@@ -103,15 +183,19 @@ header p {
 }
 
 .map-container h3 {
-    color: #ffd700;
+    color: var(--gold);
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #map {
     height: 300px;
     width: 100%;
     border-radius: 8px;
-    border: 2px solid #ffd700;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .map-note {
@@ -139,24 +223,62 @@ header p {
 
 .section-title h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
+    color: var(--gold);
     font-size: 2em;
     letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.search-filter {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-filter input, 
+.search-filter select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    background: var(--dark-bg);
+    color: var(--text-color);
+}
+
+.search-filter input {
+    flex: 2;
+    min-width: 200px;
+}
+
+.search-filter select {
+    flex: 1;
+    min-width: 150px;
+}
+
+.menu-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
 }
 
 .item {
-    background: rgba(30, 30, 30, 0.9);
+    background: var(--card-bg);
     border-radius: 10px;
-    margin: 15px;
     padding: 15px;
     width: 280px;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-    border: 1px solid #333;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+    border: 1px solid var(--border-color);
     transition: all 0.3s;
 }
 
 .item:hover {
-    transform: scale(1.03);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
 }
 
 .item-img {
@@ -167,37 +289,41 @@ header p {
     background-repeat: no-repeat;
     border-radius: 8px;
     margin-bottom: 15px;
-    border: 2px solid #ffd700;
+    border: 2px solid var(--gold);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s;
 }
 
 .item-img:hover {
     transform: scale(1.03);
-    box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4);
 }
 
 .item h3 {
-    color: #ffd700;
+    color: var(--gold);
     font-size: 1.5em;
     margin: 10px 0;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 1px;
 }
 
 .item p {
     margin: 8px 0;
     color: #ccc;
+    font-size: 0.9em;
 }
 
 .price {
     font-weight: bold;
     font-size: 1.3em;
-    color: #ff5555;
+    color: var(--red);
+    margin: 10px 0;
+    display: block;
 }
 
 button {
-    background: #1a1a1a;
-    color: #ffd700;
-    border: 2px solid #ffd700;
+    background: var(--dark-bg);
+    color: var(--gold);
+    border: 2px solid var(--gold);
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -208,34 +334,60 @@ button {
 }
 
 button:hover {
-    background: #ffd700;
-    color: #1a1a1a;
-    box-shadow: 0 0 15px #ffd700;
+    background: var(--gold);
+    color: var(--bg-color);
+    box-shadow: 0 0 15px var(--gold);
 }
 
 /* Carrinho */
 .cart {
-    background: rgba(30, 30, 30, 0.95);
+    background: var(--card-bg);
     margin: 30px auto;
     padding: 25px;
     width: 90%;
     max-width: 500px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-    border: 2px solid #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    border: 2px solid var(--gold);
 }
 
 .cart h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
+    color: var(--gold);
     text-align: center;
     font-size: 1.8em;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#cart-count {
+    background: var(--gold);
+    color: var(--bg-color);
+    padding: 2px 8px;
+    border-radius: 50%;
+    font-size: 0.8em;
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+.cart-empty i {
+    font-size: 3em;
+    margin-bottom: 10px;
+    color: var(--gold);
 }
 
 #cart-items {
     list-style: none;
     padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 #cart-items li {
@@ -243,19 +395,45 @@ button:hover {
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border-color);
 }
 
 #cart-items li span {
     flex: 1;
 }
 
+#cart-items li span:first-child {
+    margin-right: 10px;
+}
+
+.cart-total {
+    margin-top: 20px;
+    border-top: 1px solid var(--gold);
+    padding-top: 15px;
+}
+
 #total {
     font-weight: bold;
     font-size: 1.4em;
-    color: #ffd700;
+    color: var(--gold);
     text-align: right;
     margin: 20px 0;
+}
+
+.checkout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #25D366;
+    color: white;
+    border: 2px solid #25D366;
+}
+
+.checkout-btn:hover {
+    background: #128C7E;
+    border-color: #128C7E;
+    box-shadow: 0 0 15px #25D366;
 }
 
 /* Botão de remover */
@@ -270,6 +448,9 @@ button:hover {
     margin-left: 10px;
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .remove-btn:hover {
@@ -277,8 +458,51 @@ button:hover {
     transform: scale(1.1);
 }
 
+/* Loading */
+.loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.loading.active {
+    display: flex;
+}
+
+.loading-spinner {
+    border: 5px solid var(--gold);
+    border-top: 5px solid transparent;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-text {
+    color: var(--gold);
+    font-size: 1.2em;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5em;
+    }
+    
     .item {
         width: 100%;
         max-width: 350px;
@@ -291,9 +515,27 @@ button:hover {
     #map {
         height: 250px;
     }
+    
+    .search-filter {
+        flex-direction: column;
+    }
+    
+    .search-filter input,
+    .search-filter select {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
+    header h1 {
+        font-size: 2em;
+    }
+    
+    .dark-mode-btn {
+        position: static;
+        margin-top: 10px;
+    }
+    
     .remove-btn {
         width: 30px;
         height: 30px;
@@ -302,5 +544,9 @@ button:hover {
     
     #cart-items li {
         font-size: 14px;
+    }
+    
+    .customer-info {
+        padding: 15px;
     }
 }
