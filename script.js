@@ -1,31 +1,58 @@
 let cart = [];
+let map;
+let marker;
 
-// Mostra notificação temporária
-function showNotification(message) {
-    const notification = document.getElementById("notification");
-    notification.textContent = message;
-    notification.style.opacity = "1";
+// Inicializa o mapa
+function initMap() {
+    // Coordenadas centrais de Nanuque
+    map = L.map('map').setView([-17.8399, -40.3539], 14);
     
-    setTimeout(() => {
-        notification.style.opacity = "0";
-    }, 3000);
+    // Camada do mapa (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18
+    }).addTo(map);
+    
+    // Marcador inicial
+    marker = L.marker([-17.8399, -40.3539], {
+        title: "BatBurger Nanuque",
+        alt: "Localização do BatBurger",
+        riseOnHover: true
+    }).addTo(map);
+    
+    marker.bindPopup("<b>BatBurger Nanuque</b><br>Seu pedido será entregue aqui!").openPopup();
 }
 
-// Adiciona item ao carrinho com confirmação
+// Atualiza o mapa (simulação)
+function updateMap() {
+    const endereco = document.getElementById("endereco").value;
+    
+    if (endereco) {
+        // Simulação - em produção, use um serviço de geocodificação
+        alert("Endereço atualizado no mapa! (Simulação)\nNa implementação real, isso mostraria a localização exata.");
+        
+        // Mover marcador para posição aleatória próxima (simulação)
+        const lat = -17.8399 + (Math.random() * 0.01 - 0.005);
+        const lng = -40.3539 + (Math.random() * 0.01 - 0.005);
+        marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], 15);
+        marker.bindPopup(`<b>${endereco}</b><br>Confirme seu endereço`).openPopup();
+    } else {
+        alert("Por favor, insira seu endereço primeiro!");
+    }
+}
+
+// Funções do carrinho
 function addToCart(name, price) {
     cart.push({ name, price });
     updateCart();
-    showNotification(`✔ ${name} adicionado ao carrinho!`);
 }
 
-// Remove item do carrinho
 function removeFromCart(index) {
-    const removedItem = cart.splice(index, 1)[0];
+    cart.splice(index, 1);
     updateCart();
-    showNotification(`✕ ${removedItem.name} removido`);
 }
 
-// Atualiza visualização do carrinho
 function updateCart() {
     const cartList = document.getElementById("cart-items");
     const totalElement = document.getElementById("total");
@@ -47,49 +74,39 @@ function updateCart() {
     totalElement.textContent = `Total: R$ ${total.toFixed(2)}`;
 }
 
-// Envia pedido para WhatsApp
 function sendOrder() {
-    // Validação
-    if (cart.length === 0) {
-        showNotification("🦇 Seu carrinho está vazio!");
-        return;
-    }
-
     const nome = document.getElementById("nome").value;
-    const telefone = document.getElementById("telefone").value;
     const endereco = document.getElementById("endereco").value;
-    const pagamento = document.getElementById("pagamento").value;
+    const telefone = document.getElementById("telefone").value;
 
-    if (!nome || !telefone || !endereco || !pagamento) {
-        showNotification("Preencha todos os campos obrigatórios!");
+    if (cart.length === 0) {
+        alert("🦇 O carrinho está vazio! Adicione itens do BatMenu!");
         return;
     }
 
-    // Monta mensagem
-    let message = "🦇 *NOVO PEDIDO - BATBURGER* 🍔\n\n";
+    if (!nome || !endereco || !telefone) {
+        alert("Por favor, preencha todos os dados de entrega!");
+        return;
+    }
+
+    let message = "🦇 *PEDIDO DO BATBURGER* 🍔\n\n";
     message += `*Cliente:* ${nome}\n`;
-    message += `*Telefone:* ${telefone}\n`;
     message += `*Endereço:* ${endereco}\n`;
-    message += `*Pagamento:* ${pagamento}\n\n`;
-    
-    message += "*ITENS:*\n";
+    message += `*Telefone:* ${telefone}\n\n`;
+    message += "*Itens do Pedido:*\n";
+
     let total = 0;
     cart.forEach(item => {
-        message += `➤ ${item.name} - R$ ${item.price.toFixed(2)}\n`;
+        message += `✔ ${item.name} - R$ ${item.price.toFixed(2)}\n`;
         total += item.price;
     });
 
-    message += `\n*TOTAL: R$ ${total.toFixed(2)}*\n\n`;
-    message += "🦇 O Batmóvel já está a caminho!";
+    message += `\n💰 *Total: R$ ${total.toFixed(2)}*`;
+    message += "\n\n🔔 *Observações:* ________________";
 
-    // Envia para WhatsApp
-    window.open(`https://wa.me/5533991255080?text=${encodeURIComponent(message)}`, "_blank");
+    const whatsappUrl = `https://wa.me/5533991255080?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
 }
 
-// Formata telefone automaticamente
-document.getElementById("telefone").addEventListener("input", function(e) {
-    e.target.value = e.target.value
-        .replace(/\D/g, "")
-        .replace(/(\d{2})(\d)/, "($1) $2")
-        .replace(/(\d{5})(\d)/, "$1-$2");
-});
+// Inicializa o mapa quando a página carrega
+window.onload = initMap;
