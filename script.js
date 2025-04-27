@@ -1,227 +1,27 @@
-// Variáveis globais
 let cart = JSON.parse(localStorage.getItem('batburger-cart')) || [];
-let map;
-let marker;
-let menuItems = [
-    {
-        id: 1,
-        name: "Hambúrguer do Robin",
-        description: "Pão, bife, alface, tomate, milho e batata palha.",
-        price: 18.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/hamburguer.png?raw=true",
-        category: "classico"
-    },
-    {
-        id: 2,
-        name: "X-Batman",
-        description: "Pão, bife, queijo, batata palha, milho, alface e tomate.",
-        price: 22.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/xburguer.png?raw=true",
-        category: "classico"
-    },
-    {
-        id: 3,
-        name: "X-Egg do Coringa",
-        description: "Pão, bife, queijo, ovo, batata palha, milho e tomate.",
-        price: 24.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/xegg.png?raw=true",
-        category: "classico"
-    },
-    {
-        id: 4,
-        name: "X-Bacon do Alfred",
-        description: "Pão, bife, queijo, bacon, batata palha, milho, alface e tomate.",
-        price: 26.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/xbacon.png?raw=true",
-        category: "especial"
-    },
-    {
-        id: 5,
-        name: "X-Egg Bacon do Asa Noturna",
-        description: "Pão, bife, queijo, bacon, ovo, batata palha, milho, alface e tomate.",
-        price: 28.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/eggbacon.png?raw=true",
-        category: "especial"
-    },
-    {
-        id: 6,
-        name: "X-Tudo do Cavaleiro das Trevas",
-        description: "Pão, bife, calabresa, ovo, bacon, presunto, alface, banana, tomate, milho, batata palha e molho especial.",
-        price: 32.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/xtudo.png?raw=true",
-        category: "especial"
-    },
-    {
-        id: 7,
-        name: "X-Picanha 90g do Comissário Gordon",
-        description: "Pão, bife de picanha 90g, calabresa, ovo, presunto, alface, tomate, milho, banana, batata palha e molho especial.",
-        price: 34.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/picanha90.png?raw=true",
-        category: "picanha"
-    },
-    {
-        id: 8,
-        name: "X-Picanha 140g do Batman",
-        description: "Pão, bife de 140g, presunto, ovo, calabresa, banana, bacon, alface, tomate, milho, batata palha e molho especial.",
-        price: 38.90,
-        image: "https://github.com/NFCBonifacio/BATBURGER/blob/main/picanha140.png?raw=true",
-        category: "picanha"
-    }
-];
 
-// Inicialização quando a página carrega
+// Atualiza o carrinho quando a página carrega
 document.addEventListener('DOMContentLoaded', function() {
-    initMap();
-    renderMenuItems();
     updateCart();
-    setupDarkMode();
 });
 
-// Configura o modo noturno
-function setupDarkMode() {
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    const isDarkMode = localStorage.getItem('batburger-darkMode') === 'true';
-    
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
-    }
-    
-    darkModeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('batburger-darkMode', isDark);
-        
-        if (isDark) {
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
-        } else {
-            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> Modo Noturno';
-        }
-    });
-}
-
-// Inicializa o mapa
-function initMap() {
-    // Coordenadas centrais de Nanuque
-    map = L.map('map').setView([-17.8399, -40.3539], 14);
-    
-    // Camada do mapa (OpenStreetMap)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 18
-    }).addTo(map);
-    
-    // Marcador inicial
-    marker = L.marker([-17.8399, -40.3539], {
-        title: "BatBurger Nanuque",
-        alt: "Localização do BatBurger",
-        riseOnHover: true
-    }).addTo(map);
-    
-    marker.bindPopup("<b>BatBurger Nanuque</b><br>Seu pedido será entregue aqui!").openPopup();
-}
-
-// Atualiza o mapa com o endereço do cliente
-function updateMap() {
-    const endereco = document.getElementById("endereco").value;
-    
-    if (endereco) {
-        showLoading("Atualizando mapa...");
-        
-        // Simulação - em produção, use um serviço de geocodificação como Nominatim
-        setTimeout(() => {
-            // Mover marcador para posição aleatória próxima (simulação)
-            const lat = -17.8399 + (Math.random() * 0.01 - 0.005);
-            const lng = -40.3539 + (Math.random() * 0.01 - 0.005);
-            marker.setLatLng([lat, lng]);
-            map.setView([lat, lng], 15);
-            marker.bindPopup(`<b>${endereco}</b><br>Confirme seu endereço`).openPopup();
-            hideLoading();
-            
-            // Em produção real, você usaria algo como:
-            // fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`)
-            // .then(response => response.json())
-            // .then(data => {
-            //     if (data.length > 0) {
-            //         const lat = parseFloat(data[0].lat);
-            //         const lon = parseFloat(data[0].lon);
-            //         marker.setLatLng([lat, lon]);
-            //         map.setView([lat, lon], 15);
-            //         marker.bindPopup(`<b>${endereco}</b>`).openPopup();
-            //     }
-            //     hideLoading();
-            // });
-        }, 1000);
-    } else {
-        alert("Por favor, insira seu endereço primeiro!");
-    }
-}
-
-// Renderiza os itens do menu
-function renderMenuItems() {
-    const menuContainer = document.getElementById('menu-items');
-    menuContainer.innerHTML = '';
-    
-    menuItems.forEach(item => {
-        const itemElement = document.createElement('div');
-        itemElement.className = 'item';
-        itemElement.dataset.category = item.category;
-        itemElement.dataset.name = item.name.toLowerCase();
-        
-        itemElement.innerHTML = `
-            <div class="item-img" style="background-image: url('${item.image}')"></div>
-            <h3>${item.name}</h3>
-            <p>${item.description}</p>
-            <span class="price">R$ ${item.price.toFixed(2)}</span>
-            <button onclick="addToCart(${item.id})">PEDIR AGORA</button>
-        `;
-        
-        menuContainer.appendChild(itemElement);
-    });
-}
-
-// Filtra os itens do menu
-function filterItems() {
-    const searchTerm = document.getElementById('search').value.toLowerCase();
-    const category = document.getElementById('category-filter').value;
-    
-    const items = document.querySelectorAll('.item');
-    
-    items.forEach(item => {
-        const itemCategory = item.dataset.category;
-        const itemName = item.dataset.name;
-        const matchesSearch = itemName.includes(searchTerm);
-        const matchesCategory = category === 'all' || itemCategory === category;
-        
-        if (matchesSearch && matchesCategory) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-}
-
 // Adiciona item ao carrinho
-function addToCart(itemId) {
-    const item = menuItems.find(i => i.id === itemId);
-    if (!item) return;
-    
+function addToCart(name, price) {
     // Verifica se o item já está no carrinho
-    const existingItem = cart.find(i => i.id === itemId);
+    const existingItem = cart.find(item => item.name === name);
     
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
         cart.push({
-            id: item.id,
-            name: item.name,
-            price: item.price,
+            name: name,
+            price: price,
             quantity: 1
         });
     }
     
     updateCart();
-    showNotification(`${item.name} adicionado ao carrinho!`);
+    showNotification(`${name} adicionado ao carrinho!`);
 }
 
 // Remove item do carrinho
@@ -294,7 +94,7 @@ function sendOrder() {
     message += `*Cliente:* ${nome}\n`;
     message += `*Endereço:* ${endereco}\n`;
     message += `*Telefone:* ${telefone}\n\n`;
-    message += "*Itens do Pedido:*\n`;
+    message += "*Itens do Pedido:*\n";
     
     let total = 0;
     cart.forEach(item => {
@@ -322,26 +122,6 @@ function showNotification(message, type = 'success') {
         notification.classList.add('fade-out');
         setTimeout(() => notification.remove(), 500);
     }, 3000);
-}
-
-// Mostra loading
-function showLoading(text = 'Carregando...') {
-    const loading = document.createElement('div');
-    loading.className = 'loading active';
-    loading.innerHTML = `
-        <div class="loading-spinner"></div>
-        <div class="loading-text">${text}</div>
-    `;
-    document.body.appendChild(loading);
-}
-
-// Esconde loading
-function hideLoading() {
-    const loading = document.querySelector('.loading');
-    if (loading) {
-        loading.classList.remove('active');
-        setTimeout(() => loading.remove(), 500);
-    }
 }
 
 // Adiciona estilos dinâmicos para notificações
