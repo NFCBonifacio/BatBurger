@@ -107,7 +107,7 @@ function sendOrder() {
     message += "\n\n🔔 *Observações:* ________________";
     
     // Abre o WhatsApp
-    const whatsappUrl = `https://wa.me/55${formattedPhone}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/5533998351903}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 }
 
