@@ -187,6 +187,12 @@ function updatePixQRCode() {
     const cart = getCart();
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const pixQrCode = document.getElementById('pix-qrcode');
+    const pixAmountElement = document.getElementById('pix-amount');
+    
+    // Atualizar valor exibido
+    const formattedTotal = total.toFixed(2);
+    pixAmountElement.textContent = `R$ ${formattedTotal}`;
+    document.getElementById('pix-total').textContent = `R$ ${formattedTotal}`;
     
     // Limpar QR Code anterior
     pixQrCode.innerHTML = '';
@@ -194,15 +200,16 @@ function updatePixQRCode() {
     if (total > 0) {
         const pixInfo = {
             chave: '33998096312',
-            valor: total.toFixed(2),
-            descricao: 'BatBurger - Pedido de Lanches'
+            valor: formattedTotal,
+            nome: 'BatBurger',
+            cidade: 'Gotham City'
         };
         
-        // Gerar QR Code (usando a biblioteca QRCode.js)
+        // Gerar QR Code com os dados completos
         new QRCode(pixQrCode, {
-            text: `PIX:${pixInfo.chave}?amount=${pixInfo.valor}&message=${pixInfo.descricao}`,
-            width: 150,
-            height: 150,
+            text: generatePixPayload(pixInfo),
+            width: 180,
+            height: 180,
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
@@ -210,6 +217,57 @@ function updatePixQRCode() {
     }
 }
 
+// Gerar payload PIX copiável
+function generatePixPayload(pixInfo) {
+    return `00020126580014BR.GOV.BCB.PIX0136${pixInfo.chave}520400005303986540${pixInfo.valor.length}${pixInfo.valor}5802BR59${pixInfo.nome}6009${pixInfo.cidade}62130512BatBurgerPIX6304`;
+}
+
+// Configurar botões de copiar (adicionar no DOMContentLoaded)
+const copyPixKeyBtn = document.getElementById('copy-pix-key');
+const pixKeyElement = document.getElementById('pix-key');
+const copyPixAmountBtn = document.getElementById('copy-pix-amount');
+const pixAmountElement = document.getElementById('pix-amount');
+const copyPixAllBtn = document.getElementById('copy-pix-all');
+
+function copyToClipboard(text, element, successMessage) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalContent = element.innerHTML;
+        element.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+        element.classList.add('success');
+        showNotification(successMessage, 'success');
+        
+        setTimeout(() => {
+            element.innerHTML = originalContent;
+            element.classList.remove('success');
+        }, 3000);
+    }).catch(err => {
+        console.error('Erro ao copiar:', err);
+        showNotification('Erro ao copiar', 'error');
+    });
+}
+
+if (copyPixKeyBtn && pixKeyElement) {
+    copyPixKeyBtn.addEventListener('click', () => {
+        copyToClipboard(pixKeyElement.textContent, copyPixKeyBtn, 'Chave PIX copiada!');
+    });
+}
+
+if (copyPixAmountBtn && pixAmountElement) {
+    copyPixAmountBtn.addEventListener('click', () => {
+        const amount = pixAmountElement.textContent.replace('R$ ', '');
+        copyToClipboard(amount, copyPixAmountBtn, 'Valor copiado!');
+    });
+}
+
+if (copyPixAllBtn) {
+    copyPixAllBtn.addEventListener('click', () => {
+        const cart = getCart();
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const payload = `Chave PIX: 33998096312\nValor: R$ ${total.toFixed(2)}`;
+        
+        copyToClipboard(payload, copyPixAllBtn, 'Chave e valor copiados!');
+    });
+}
 // Função para enviar o pedido via WhatsApp
 function sendOrder() {
     const cart = getCart();
