@@ -35,6 +35,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+
+// Configurar botão de copiar chave PIX
+const copyPixKeyBtn = document.getElementById('copy-pix-key');
+const pixKeyElement = document.getElementById('pix-key');
+
+if (copyPixKeyBtn && pixKeyElement) {
+    copyPixKeyBtn.addEventListener('click', function() {
+        const pixKey = pixKeyElement.textContent;
+        navigator.clipboard.writeText(pixKey).then(() => {
+            copyPixKeyBtn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            copyPixKeyBtn.classList.add('success');
+            showNotification('Chave PIX copiada com sucesso!', 'success');
+            
+            // Voltar ao estado original após 3 segundos
+            setTimeout(() => {
+                copyPixKeyBtn.innerHTML = '<i class="far fa-copy"></i> Copiar';
+                copyPixKeyBtn.classList.remove('success');
+            }, 3000);
+        }).catch(err => {
+            console.error('Erro ao copiar chave PIX:', err);
+            showNotification('Erro ao copiar chave PIX', 'error');
+        });
+    });
+}
     // Botão voltar ao topo
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 300) {
