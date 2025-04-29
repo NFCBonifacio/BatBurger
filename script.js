@@ -1,253 +1,292 @@
-let cart = JSON.parse(localStorage.getItem('batburger-cart')) || [];
-
-// Verifica se é depois da meia-noite
-function isAfterMidnight() {
-    const now = new Date();
-    return now.getHours() >= 0 && now.getHours() < 6; // Entre 00:00 e 06:00
-}
-
-// Atualiza as opções de pagamento conforme o horário
-function updatePaymentMethods() {
-    if (isAfterMidnight()) {
-        document.querySelector('input[value="dinheiro"]').disabled = true;
-        document.getElementById('cash-label').style.opacity = '0.5';
-        document.querySelector('input[value="pix"]').checked = true;
-        document.getElementById('troco-field').style.display = 'none';
-    }
-}
-
-// Atualiza o carrinho quando a página carrega
+// script.js
 document.addEventListener('DOMContentLoaded', function() {
-    updateCart();
-    updatePaymentMethods();
+    // Variáveis globais
+    let cart = [];
+    let orderCount = 0;
+    const cartItems = document.getElementById('cart-items');
+    const cartEmpty = document.getElementById('cart-empty');
+    const cartCount = document.getElementById('cart-count');
+    const orderCountElement = document.getElementById('order-count');
+    const totalElement = document.getElementById('total');
+    const pixTotalElement = document.getElementById('pix-total');
+    const paymentOptions = document.getElementsByName('payment');
+    const trocoField = document.getElementById('troco-field');
+    const pixArea = document.getElementById('pix-area');
+    const backToTopButton = document.getElementById('back-to-top');
     
-    // Mostra/oculta campo de troco conforme seleção
-    document.querySelectorAll('input[name="payment"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            document.getElementById('troco-field').style.display = 
-                this.value === 'dinheiro' ? 'block' : 'none';
+    // Inicializar contador de pedidos com um valor aleatório para simular atividade
+    orderCount = Math.floor(Math.random() * 50) + 10;
+    updateOrderCount();
+    
+    // Configurar listeners para os métodos de pagamento
+    paymentOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            if (this.value === 'dinheiro') {
+                trocoField.style.display = 'block';
+                pixArea.style.display = 'none';
+            } else if (this.value === 'pix') {
+                trocoField.style.display = 'none';
+                pixArea.style.display = 'block';
+                updatePixQRCode();
+            } else {
+                trocoField.style.display = 'none';
+                pixArea.style.display = 'none';
+            }
         });
+    });
+    
+    // Botão voltar ao topo
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopButton.style.display = 'flex';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+    
+    backToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    // Animação dos itens do cardápio
+    const menuItems = document.querySelectorAll('.item');
+    menuItems.forEach(item => {
+        const order = item.style.getPropertyValue('--order');
+        item.style.animationDelay = `${order * 0.1}s`;
     });
 });
 
-// Adiciona item ao carrinho
-function addToCart(name, price) {
-    // Obtém os ingredientes selecionados
-    const checkboxes = document.querySelectorAll(`input[data-item="${name}"]:checked`);
-    const ingredients = Array.from(checkboxes).map(cb => cb.dataset.ingredient);
-    
-    // Verifica se o item já está no carrinho
-    const existingItem = cart.find(item => 
-        item.name === name && 
-        JSON.stringify(item.ingredients) === JSON.stringify(ingredients));
+// Função para adicionar item ao carrinho
+function addToCart(itemName, itemPrice) {
+    const cart = getCart();
+    const existingItem = cart.find(item => item.name === itemName);
     
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
         cart.push({
-            name: name,
-            price: price,
-            quantity: 1,
-            ingredients: ingredients
+            name: itemName,
+            price: itemPrice,
+            quantity: 1
         });
     }
     
-    updateCart();
-    showNotification(`${name} adicionado ao carrinho!`);
+    saveCart(cart);
+    updateCartDisplay();
+    updateOrderCount();
+    showNotification(`${itemName} adicionado ao carrinho!`, 'success');
 }
 
-// Remove item do carrinho
-function removeFromCart(index) {
-    const removedItem = cart[index];
-    cart.splice(index, 1);
-    updateCart();
-    showNotification(`${removedItem.name} removido do carrinho`, 'warning');
+// Função para remover item do carrinho
+function removeFromCart(itemName) {
+    let cart = getCart();
+    cart = cart.filter(item => item.name !== itemName);
+    saveCart(cart);
+    updateCartDisplay();
+    showNotification(`${itemName} removido do carrinho`, 'warning');
 }
 
-// Atualiza a exibição do carrinho
-function updateCart() {
-    const cartList = document.getElementById('cart-items');
-    const totalElement = document.getElementById('total');
-    const cartCount = document.getElementById('cart-count');
+// Função para atualizar a exibição do carrinho
+function updateCartDisplay() {
+    const cart = getCart();
+    const cartItems = document.getElementById('cart-items');
     const cartEmpty = document.getElementById('cart-empty');
+    const cartCount = document.getElementById('cart-count');
+    const totalElement = document.getElementById('total');
+    const pixTotalElement = document.getElementById('pix-total');
     
-    cartList.innerHTML = '';
-    let total = 0;
+    // Limpar o carrinho
+    cartItems.innerHTML = '';
     
     if (cart.length === 0) {
         cartEmpty.style.display = 'block';
         cartCount.textContent = '(0)';
+        totalElement.textContent = 'Total: R$ 0,00';
+        pixTotalElement.textContent = 'R$ 0,00';
     } else {
         cartEmpty.style.display = 'none';
-        cartCount.textContent = `(${cart.reduce((acc, item) => acc + item.quantity, 0)})`;
         
-        cart.forEach((item, index) => {
+        // Calcular total
+        let total = 0;
+        let itemCount = 0;
+        
+        // Adicionar itens ao carrinho
+        cart.forEach(item => {
+            const li = document.createElement('li');
             const itemTotal = item.price * item.quantity;
             total += itemTotal;
-            
-            const li = document.createElement('li');
-            
-            // Mostra ingredientes personalizados se houver
-            const ingredientsText = item.ingredients && item.ingredients.length > 0 
-                ? `<small>(Ingredientes: ${item.ingredients.join(', ')})</small>` 
-                : '';
+            itemCount += item.quantity;
             
             li.innerHTML = `
-                <div>
-                    <span>${item.name} x${item.quantity}</span>
-                    ${ingredientsText}
-                </div>
+                <span>${item.name} x${item.quantity}</span>
                 <span>R$ ${itemTotal.toFixed(2)}</span>
-                <button class="remove-btn" onclick="removeFromCart(${index})" title="Remover">
+                <button class="remove-btn" onclick="removeFromCart('${item.name}')" aria-label="Remover ${item.name} do carrinho">
                     <i class="fas fa-times"></i>
                 </button>
             `;
-            cartList.appendChild(li);
+            
+            cartItems.appendChild(li);
         });
+        
+        // Atualizar contador e total
+        cartCount.textContent = `(${itemCount})`;
+        totalElement.textContent = `Total: R$ ${total.toFixed(2)}`;
+        pixTotalElement.textContent = `R$ ${total.toFixed(2)}`;
     }
-    
-    totalElement.textContent = `Total: R$ ${total.toFixed(2)}`;
-    localStorage.setItem('batburger-cart', JSON.stringify(cart));
 }
 
-// Envia o pedido para o WhatsApp
-function sendOrder() {
-    const nome = document.getElementById('nome').value.trim();
-    const endereco = document.getElementById('endereco').value.trim();
-    const telefone = document.getElementById('telefone').value.trim();
-    const observacoes = document.getElementById('observacoes').value.trim();
-    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-    const troco = document.getElementById('troco').value.trim();
+// Função para atualizar o contador de pedidos
+function updateOrderCount() {
+    const cart = getCart();
+    const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
     
-    // Validações
+    // Atualizar apenas se houver novos itens
+    if (itemCount > 0) {
+        const orderCountElement = document.getElementById('order-count');
+        let currentCount = parseInt(orderCountElement.textContent);
+        const newCount = currentCount + itemCount;
+        
+        // Animação de contagem
+        const interval = setInterval(() => {
+            if (currentCount < newCount) {
+                currentCount++;
+                orderCountElement.textContent = currentCount;
+            } else {
+                clearInterval(interval);
+            }
+        }, 100);
+    }
+}
+
+// Função para atualizar o QR Code do PIX
+function updatePixQRCode() {
+    const cart = getCart();
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const pixQrCode = document.getElementById('pix-qrcode');
+    
+    // Limpar QR Code anterior
+    pixQrCode.innerHTML = '';
+    
+    if (total > 0) {
+        const pixInfo = {
+            chave: 'batburger@gotham.com',
+            valor: total.toFixed(2),
+            descricao: 'BatBurger - Pedido de Lanches'
+        };
+        
+        // Gerar QR Code (usando a biblioteca QRCode.js)
+        new QRCode(pixQrCode, {
+            text: `PIX:${pixInfo.chave}?amount=${pixInfo.valor}&message=${pixInfo.descricao}`,
+            width: 150,
+            height: 150,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+}
+
+// Função para enviar o pedido via WhatsApp
+function sendOrder() {
+    const cart = getCart();
+    const nome = document.getElementById('nome').value;
+    const endereco = document.getElementById('endereco').value;
+    const telefone = document.getElementById('telefone').value;
+    const observacoes = document.getElementById('observacoes').value;
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    const troco = paymentMethod === 'dinheiro' ? document.getElementById('troco').value : '';
+    
     if (cart.length === 0) {
-        showNotification('🦇 O carrinho está vazio! Adicione itens do BatMenu!', 'error');
+        showNotification('Seu carrinho está vazio! Adicione itens antes de finalizar.', 'error');
         return;
     }
     
     if (!nome || !endereco || !telefone) {
-        showNotification('Por favor, preencha todos os dados de entrega!', 'error');
+        showNotification('Por favor, preencha todos os campos obrigatórios!', 'error');
         return;
     }
     
-    // Validação do telefone
-    const formattedPhone = telefone.replace(/\D/g, '');
-    if (formattedPhone.length < 10 || formattedPhone.length > 11) {
-        showNotification('Por favor, insira um telefone válido com DDD!', 'error');
-        return;
-    }
+    // Calcular total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
-    // Monta a mensagem
-    let message = "🦇 *PEDIDO DO BATBURGER* 🍔\n\n";
+    // Montar mensagem
+    let message = `🦇 *NOVO PEDIDO BATBURGER* 🦇\n\n`;
     message += `*Cliente:* ${nome}\n`;
     message += `*Endereço:* ${endereco}\n`;
     message += `*Telefone:* ${telefone}\n\n`;
+    message += `*ITENS DO PEDIDO:*\n`;
     
-    // Forma de pagamento
-    let paymentText = '';
-    switch(paymentMethod) {
-        case 'cartao':
-            paymentText = 'Cartão de Crédito/Débito';
-            break;
-        case 'pix':
-            paymentText = 'PIX';
-            break;
-        case 'dinheiro':
-            paymentText = `Dinheiro${troco ? ` (Troco para: ${troco})` : ''}`;
-            break;
-    }
-    message += `*Pagamento:* ${paymentText}\n\n`;
-    
-    // Itens do pedido
-    message += "*Itens do Pedido:*\n";
-    let total = 0;
     cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        message += `✔ ${item.name} x${item.quantity} - R$ ${itemTotal.toFixed(2)}\n`;
-        
-        // Mostra ingredientes personalizados
-        if (item.ingredients && item.ingredients.length > 0) {
-            message += `   ↳ Ingredientes: ${item.ingredients.join(', ')}\n`;
-        }
-        
-        total += itemTotal;
+        message += `- ${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
     });
     
-    message += `\n💰 *Total: R$ ${total.toFixed(2)}*`;
+    message += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
+    message += `*FORMA DE PAGAMENTO:* ${getPaymentMethodName(paymentMethod)}\n`;
     
-    // Observações
-    if (observacoes) {
-        message += `\n\n🔔 *Observações:* ${observacoes}`;
+    if (paymentMethod === 'dinheiro' && troco) {
+        message += `*Troco para:* R$ ${troco}\n`;
     }
     
-    // Abre o WhatsApp
-    const whatsappUrl = `https://wa.me/5533998351903?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    if (observacoes) {
+        message += `\n*OBSERVAÇÕES:*\n${observacoes}\n`;
+    }
     
-    // Limpa o carrinho após enviar
-    cart = [];
-    updateCart();
+    message += `\n🦇 Obrigado por escolher o BatBurger! Seu pedido será preparado e enviado pelo Robin o mais rápido possível! 🍔`;
+    
+    // Codificar mensagem para URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Abrir WhatsApp
+    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+    
+    // Limpar carrinho após envio
+    saveCart([]);
+    updateCartDisplay();
+    document.getElementById('nome').value = '';
+    document.getElementById('endereco').value = '';
+    document.getElementById('telefone').value = '';
     document.getElementById('observacoes').value = '';
     document.getElementById('troco').value = '';
+    
+    // Mostrar notificação de sucesso
+    showNotification('Pedido enviado com sucesso!', 'success');
 }
 
-// Mostra notificação
-function showNotification(message, type = 'success') {
+// Função auxiliar para obter o nome do método de pagamento
+function getPaymentMethodName(method) {
+    switch (method) {
+        case 'cartao': return 'Cartão de Crédito/Débito';
+        case 'dinheiro': return 'Dinheiro';
+        case 'pix': return 'PIX';
+        default: return method;
+    }
+}
+
+// Função para mostrar notificações
+function showNotification(message, type) {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
     document.body.appendChild(notification);
     
+    // Remover notificação após 3 segundos
     setTimeout(() => {
         notification.classList.add('fade-out');
-        setTimeout(() => notification.remove(), 500);
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
     }, 3000);
 }
 
-// Estilos dinâmicos para notificações
-const notificationStyles = document.createElement('style');
-notificationStyles.textContent = `
-.notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 25px;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    animation: slideIn 0.3s ease-out;
+// Funções para manipulação do carrinho no localStorage
+function getCart() {
+    const cartJson = localStorage.getItem('batburger-cart');
+    return cartJson ? JSON.parse(cartJson) : [];
 }
 
-.notification.success {
-    background: #4CAF50;
-    border-left: 5px solid #2E7D32;
+function saveCart(cart) {
+    localStorage.setItem('batburger-cart', JSON.stringify(cart));
 }
 
-.notification.warning {
-    background: #FF9800;
-    border-left: 5px solid #F57C00;
-}
-
-.notification.error {
-    background: #F44336;
-    border-left: 5px solid #D32F2F;
-}
-
-.notification.fade-out {
-    animation: fadeOut 0.5s ease-out forwards;
-}
-
-@keyframes slideIn {
-    from { bottom: -50px; opacity: 0; }
-    to { bottom: 20px; opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-`;
-document.head.appendChild(notificationStyles);
+// Inicializar o carrinho ao carregar a página
+updateCartDisplay();
