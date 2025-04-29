@@ -1,14 +1,45 @@
 let cart = JSON.parse(localStorage.getItem('batburger-cart')) || [];
 
+// Verifica se é depois da meia-noite
+function isAfterMidnight() {
+    const now = new Date();
+    return now.getHours() >= 0 && now.getHours() < 6; // Entre 00:00 e 06:00
+}
+
+// Atualiza as opções de pagamento conforme o horário
+function updatePaymentMethods() {
+    if (isAfterMidnight()) {
+        document.querySelector('input[value="dinheiro"]').disabled = true;
+        document.getElementById('cash-label').style.opacity = '0.5';
+        document.querySelector('input[value="pix"]').checked = true;
+        document.getElementById('troco-field').style.display = 'none';
+    }
+}
+
 // Atualiza o carrinho quando a página carrega
 document.addEventListener('DOMContentLoaded', function() {
     updateCart();
+    updatePaymentMethods();
+    
+    // Mostra/oculta campo de troco conforme seleção
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('troco-field').style.display = 
+                this.value === 'dinheiro' ? 'block' : 'none';
+        });
+    });
 });
 
 // Adiciona item ao carrinho
 function addToCart(name, price) {
+    // Obtém os ingredientes selecionados
+    const checkboxes = document.querySelectorAll(`input[data-item="${name}"]:checked`);
+    const ingredients = Array.from(checkboxes).map(cb => cb.dataset.ingredient);
+    
     // Verifica se o item já está no carrinho
-    const existingItem = cart.find(item => item.name === name);
+    const existingItem = cart.find(item => 
+        item.name === name && 
+        JSON.stringify(item.ingredients) === JSON.stringify(ingredients));
     
     if (existingItem) {
         existingItem.quantity += 1;
@@ -16,7 +47,8 @@ function addToCart(name, price) {
         cart.push({
             name: name,
             price: price,
-            quantity: 1
+            quantity: 1,
+            ingredients: ingredients
         });
     }
     
@@ -54,8 +86,17 @@ function updateCart() {
             total += itemTotal;
             
             const li = document.createElement('li');
+            
+            // Mostra ingredientes personalizados se houver
+            const ingredientsText = item.ingredients && item.ingredients.length > 0 
+                ? `<small>(Ingredientes: ${item.ingredients.join(', ')})</small>` 
+                : '';
+            
             li.innerHTML = `
-                <span>${item.name} x${item.quantity}</span>
+                <div>
+                    <span>${item.name} x${item.quantity}</span>
+                    ${ingredientsText}
+                </div>
                 <span>R$ ${itemTotal.toFixed(2)}</span>
                 <button class="remove-btn" onclick="removeFromCart(${index})" title="Remover">
                     <i class="fas fa-times"></i>
@@ -74,6 +115,9 @@ function sendOrder() {
     const nome = document.getElementById('nome').value.trim();
     const endereco = document.getElementById('endereco').value.trim();
     const telefone = document.getElementById('telefone').value.trim();
+    const observacoes = document.getElementById('observacoes').value.trim();
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    const troco = document.getElementById('troco').value.trim();
     
     // Validações
     if (cart.length === 0) {
@@ -86,29 +130,65 @@ function sendOrder() {
         return;
     }
     
-    // Formata o número de telefone (remove caracteres não numéricos)
+    // Validação do telefone
     const formattedPhone = telefone.replace(/\D/g, '');
+    if (formattedPhone.length < 10 || formattedPhone.length > 11) {
+        showNotification('Por favor, insira um telefone válido com DDD!', 'error');
+        return;
+    }
     
     // Monta a mensagem
     let message = "🦇 *PEDIDO DO BATBURGER* 🍔\n\n";
     message += `*Cliente:* ${nome}\n`;
     message += `*Endereço:* ${endereco}\n`;
     message += `*Telefone:* ${telefone}\n\n`;
-    message += "*Itens do Pedido:*\n";
     
+    // Forma de pagamento
+    let paymentText = '';
+    switch(paymentMethod) {
+        case 'cartao':
+            paymentText = 'Cartão de Crédito/Débito';
+            break;
+        case 'pix':
+            paymentText = 'PIX';
+            break;
+        case 'dinheiro':
+            paymentText = `Dinheiro${troco ? ` (Troco para: ${troco})` : ''}`;
+            break;
+    }
+    message += `*Pagamento:* ${paymentText}\n\n`;
+    
+    // Itens do pedido
+    message += "*Itens do Pedido:*\n";
     let total = 0;
     cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         message += `✔ ${item.name} x${item.quantity} - R$ ${itemTotal.toFixed(2)}\n`;
+        
+        // Mostra ingredientes personalizados
+        if (item.ingredients && item.ingredients.length > 0) {
+            message += `   ↳ Ingredientes: ${item.ingredients.join(', ')}\n`;
+        }
+        
         total += itemTotal;
     });
     
     message += `\n💰 *Total: R$ ${total.toFixed(2)}*`;
-    message += "\n\n🔔 *Observações:* ________________";
+    
+    // Observações
+    if (observacoes) {
+        message += `\n\n🔔 *Observações:* ${observacoes}`;
+    }
     
     // Abre o WhatsApp
-    const whatsappUrl = `https://wa.me/5533998351903}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/5533998351903?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+    
+    // Limpa o carrinho após enviar
+    cart = [];
+    updateCart();
+    document.getElementById('observacoes').value = '';
+    document.getElementById('troco').value = '';
 }
 
 // Mostra notificação
@@ -124,7 +204,7 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Adiciona estilos dinâmicos para notificações
+// Estilos dinâmicos para notificações
 const notificationStyles = document.createElement('style');
 notificationStyles.textContent = `
 .notification {
