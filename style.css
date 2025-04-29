@@ -163,6 +163,56 @@ button:hover {
     box-shadow: 0 0 15px #ffd700;
 }
 
+/* Personalização de itens */
+.customize-item {
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.customize-item h4 {
+    margin: 0 0 8px 0;
+    color: #ffd700;
+    font-size: 1em;
+}
+
+.ingredient-options {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ingredient-options label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85em;
+    cursor: pointer;
+}
+
+.ingredient-options input {
+    margin: 0;
+}
+
+/* Formas de pagamento */
+.payment-methods {
+    margin-top: 15px;
+}
+
+.payment-options {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.payment-options label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
 /* Carrinho */
 .cart {
     background: rgba(30, 30, 30, 0.95);
@@ -285,7 +335,7 @@ button:hover {
     font-weight: bold;
 }
 
-.form-group input {
+.form-group input, .form-group textarea {
     width: 100%;
     padding: 10px;
     border-radius: 5px;
@@ -295,7 +345,12 @@ button:hover {
     transition: all 0.3s;
 }
 
-.form-group input:focus {
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-group input:focus, .form-group textarea:focus {
     outline: none;
     border-color: #ffd700;
     box-shadow: 0 0 5px #ffd700;
@@ -354,6 +409,11 @@ button:hover {
     
     .item-img {
         height: 160px;
+    }
+    
+    .payment-options {
+        flex-direction: column;
+        gap: 8px;
     }
 }
 
