@@ -12,12 +12,105 @@
     <meta name="author" content="BatBurger">
     <meta property="og:title" content="BatBurger - O Melhor Hambúrguer de Gotham">
     <meta property="og:description" content="O único delivery que te salva da fome até na madrugada!">
-    <meta property="og:image" content="https://github.com/NFCBonifacio/BATBURGER/blob/main/transferir.png?raw=true">
-    <meta property="og:url" content="https://seusite.com">
+    <meta property="og:image" content="transferir.png">
+    <meta property="og:url" content="https://nfcbonifacio.github.io/BatBurger/">
 </head>
 <body>
-    <!-- [Todo o conteúdo existente permanece igual até a seção PIX] -->
-    
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- Cabeçalho com Logo do Batman -->
+    <header>
+        <div class="bat-logo">
+            <img src="transferir.png" alt="Batman Logo" width="80">
+        </div>
+        <h1>BAT<span>BURGER</span></h1>
+        <p>🍔 O único delivery que te salva da fome até na madrugada! 🦇</p>
+        <div class="order-counter">
+            <p>🦇 <span id="order-count">0</span> hambúrgueres salvos esta noite!</p>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- Cardápio -->
+        <div class="menu">
+            <div class="section-title">
+                <h2>🦇 OS HERÓIS DO CARDÁPIO</h2>
+            </div>
+
+            <div class="menu-items-container">
+                <!-- Hambúrguer do Robin -->
+                <div class="item" style="--order: 1;">
+                    <div class="item-img" style="background-image: url('hamburguer.png')"></div>
+                    <h3>Hambúrguer do Robin</h3>
+                    <p>Pão, bife, alface, tomate, milho e batata palha.</p>
+                    <span class="price">R$ 18,90</span>
+                    <button onclick="addToCart('Hambúrguer do Robin', 18.90)" aria-label="Adicionar Hambúrguer do Robin ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <!-- X-Batman -->
+                <div class="item" style="--order: 2;">
+                    <div class="item-img" style="background-image: url('xburguer.png')"></div>
+                    <h3>X-Batman</h3>
+                    <p>Pão, bife, queijo, batata palha, milho, alface e tomate.</p>
+                    <span class="price">R$ 22,90</span>
+                    <button onclick="addToCart('X-Batman', 22.90)" aria-label="Adicionar X-Batman ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <!-- X-Egg do Coringa -->
+                <div class="item" style="--order: 3;">
+                    <div class="item-img" style="background-image: url('xegg.png')"></div>
+                    <h3>X-Egg do Coringa</h3>
+                    <p>Pão, bife, queijo, ovo, batata palha, milho e tomate.</p>
+                    <span class="price">R$ 24,90</span>
+                    <button onclick="addToCart('X-Egg do Coringa', 24.90)" aria-label="Adicionar X-Egg do Coringa ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <!-- X-Bacon do Alfred -->
+                <div class="item" style="--order: 4;">
+                    <div class="item-img" style="background-image: url('xbacon.png')"></div>
+                    <h3>X-Bacon do Alfred</h3>
+                    <p>Pão, bife, queijo, bacon, batata palha, milho, alface e tomate.</p>
+                    <span class="price">R$ 26,90</span>
+                    <button onclick="addToCart('X-Bacon do Alfred', 26.90)" aria-label="Adicionar X-Bacon do Alfred ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <!-- X-Egg Bacon do Asa Noturna -->
+                <div class="item" style="--order: 5;">
+                    <div class="item-img" style="background-image: url('eggbacon.png')"></div>
+                    <h3>X-Egg Bacon do Asa Noturna</h3>
+                    <p>Pão, bife, queijo, bacon, ovo, batata palha, milho, alface e tomate.</p>
+                    <span class="price">R$ 28,90</span>
+                    <button onclick="addToCart('X-Egg Bacon do Asa Noturna', 28.90)" aria-label="Adicionar X-Egg Bacon do Asa Noturna ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <!-- X-Tudo do Cavaleiro das Trevas -->
+                <div class="item" style="--order: 6;">
+                    <div class="item-img" style="background-image: url('xtudo.png')"></div>
+                    <h3>X-Tudo do Cavaleiro das Trevas</h3>
+                    <p>Pão, bife, calabresa, ovo, bacon, presunto, alface, banana, tomate, milho, batata palha e molho especial.</p>
+                    <span class="price">R$ 32,90</span>
+                    <button onclick="addToCart('X-Tudo do Cavaleiro das Trevas', 32.90)" aria-label="Adicionar X-Tudo do Cavaleiro das Trevas ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <!-- X-Picanha 90g do Comissário Gordon -->
+                <div class="item" style="--order: 7;">
+                    <div class="item-img" style="background-image: url('picanha90.png')"></div>
+                    <h3>X-Picanha 90g do Comissário Gordon</h3>
+                    <p>Pão, bife de picanha 90g, calabresa, ovo, presunto, alface, tomate, milho, banana, batata palha e molho especial.</p>
+                    <span class="price">R$ 34,90</span>
+                    <button onclick="addToCart('X-Picanha 90g do Comissário Gordon', 34.90)" aria-label="Adicionar X-Picanha 90g do Comissário Gordon ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <!-- X-Picanha 140g do Batman -->
+                <div class="item" style="--order: 8;">
+                    <div class="item-img" style="background-image: url('picanha140.png')"></div>
+                    <h3>X-Picanha 140g do Batman</h3>
+                    <p>Pão, bife de 140g, presunto, ovo, calabresa, banana, bacon, alface, tomate, milho, batata palha e molho especial.</p>
+                    <span class="price">R$ 38,90</span>
+                    <button onclick="addToCart('X-Picanha 140g do Batman', 38.90)" aria-label="Adicionar X-Picanha 140g do Batman ao carrinho">PEDIR AGORA</button>
+                </div>
+            </div>
+        </div>
     <!-- Área do PIX (aparece apenas quando seleciona PIX) -->
     <div id="pix-area" style="display: none;">
         <div class="pix-info">
