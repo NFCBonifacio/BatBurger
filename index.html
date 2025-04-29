@@ -167,25 +167,34 @@
                     <input type="text" id="troco" placeholder="Informe o valor que você vai pagar">
                 </div>
 
-               <!-- Área do PIX (aparece apenas quando seleciona PIX) -->
+              <!-- Área do PIX (aparece apenas quando seleciona PIX) -->
 <div id="pix-area" style="display: none;">
     <div class="pix-info">
         <h3>🦇 PAGAMENTO VIA PIX</h3>
-        <div class="pix-key-container">
-            <p>Chave PIX: <strong id="pix-key">33998096312</strong></p>
-            <button id="copy-pix-key" class="copy-btn" aria-label="Copiar chave PIX">
-                <i class="far fa-copy"></i> Copiar
+        <div class="pix-payment-data">
+            <div class="pix-key-container">
+                <p>Chave PIX: <strong id="pix-key">33998096312</strong></p>
+                <button id="copy-pix-key" class="copy-btn" aria-label="Copiar chave PIX">
+                    <i class="far fa-copy"></i> Copiar
+                </button>
+            </div>
+            <div class="pix-amount-container">
+                <p>Valor: <strong id="pix-amount">R$ 0,00</strong></p>
+                <button id="copy-pix-amount" class="copy-btn" aria-label="Copiar valor PIX">
+                    <i class="far fa-copy"></i> Copiar
+                </button>
+            </div>
+            <button id="copy-pix-all" class="copy-all-btn">
+                <i class="fas fa-copy"></i> Copiar Chave e Valor
             </button>
         </div>
         <div class="pix-qrcode-container">
             <div id="pix-qrcode"></div>
             <p>Valor total: <span id="pix-total">R$ 0,00</span></p>
         </div>
-        <p class="pix-instructions">Faça o pagamento via PIX e envie o comprovante pelo WhatsApp</p>
-        <p class="pix-instructions">Ou copie a chave PIX acima para pagar no seu banco</p>
+        <p class="pix-instructions">Escaneie o QR Code ou copie os dados para pagar no seu banco</p>
     </div>
 </div>
-
             <div class="form-group full-width">
                 <label for="observacoes">Observações:</label>
                 <textarea id="observacoes" placeholder="Alguma observação sobre seu pedido?"></textarea>
