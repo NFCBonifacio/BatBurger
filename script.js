@@ -169,7 +169,7 @@ function updatePixQRCode() {
     
     if (total > 0) {
         const pixInfo = {
-            chave: 'batburger@gotham.com',
+            chave: '33998096312',
             valor: total.toFixed(2),
             descricao: 'BatBurger - Pedido de Lanches'
         };
@@ -237,7 +237,7 @@ function sendOrder() {
     const encodedMessage = encodeURIComponent(message);
     
     // Abrir WhatsApp
-    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+    window.open(`https://wa.me/33998351903?text=${encodedMessage}`, '_blank');
     
     // Limpar carrinho após envio
     saveCart([]);
