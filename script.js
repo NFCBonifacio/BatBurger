@@ -237,7 +237,7 @@ function sendOrder() {
     const encodedMessage = encodeURIComponent(message);
     
     // Abrir WhatsApp
-    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+    window.open(`https://wa.me/5533998351903?text=${encodedMessage}`, '_blank');
     
     // Limpar carrinho após envio
     saveCart([]);
