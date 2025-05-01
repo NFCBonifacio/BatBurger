@@ -905,3 +905,28 @@ textarea:focus {
         --card-bg: rgba(25, 25, 25, 0.95);
     }
 }
+
+/* Estilos para a área de copiar PIX */
+#pix-copy-area {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px dashed var(--primary-color);
+}
+
+#pix-code {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+#pix-copy-area button {
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+#pix-copy-area button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
