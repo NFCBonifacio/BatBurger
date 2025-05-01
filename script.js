@@ -1,7 +1,9 @@
+// script.js
 document.addEventListener('DOMContentLoaded', function() {
     // Variáveis globais
     let cart = [];
     let orderCount = 0;
+    let receiptFile = null;
     const cartItems = document.getElementById('cart-items');
     const cartEmpty = document.getElementById('cart-empty');
     const cartCount = document.getElementById('cart-count');
@@ -12,7 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const trocoField = document.getElementById('troco-field');
     const pixArea = document.getElementById('pix-area');
     const backToTopButton = document.getElementById('back-to-top');
+    const receiptUpload = document.getElementById('receipt-upload');
+    const fileName = document.getElementById('file-name');
+    const sendReceiptBtn = document.getElementById('send-receipt-btn');
     const dinheiroOption = document.getElementById('dinheiro');
+    const whatsappNumber = '5533998351903'; // Seu número de WhatsApp
     
     // Verificar se é depois da meia-noite
     const now = new Date();
@@ -39,8 +45,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 trocoField.style.display = 'none';
                 pixArea.style.display = 'block';
                 updatePixQRCode();
+            } else {
+                trocoField.style.display = 'none';
+                pixArea.style.display = 'none';
             }
         });
+    });
+    
+    // Upload de comprovante
+    receiptUpload.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            receiptFile = e.target.files[0];
+            fileName.textContent = `Arquivo selecionado: ${receiptFile.name}`;
+            fileName.style.display = 'block';
+            sendReceiptBtn.style.display = 'block';
+        } else {
+            receiptFile = null;
+            fileName.style.display = 'none';
+            sendReceiptBtn.style.display = 'none';
+        }
     });
     
     // Botão voltar ao topo
@@ -62,8 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const order = item.style.getPropertyValue('--order');
         item.style.animationDelay = `${order * 0.1}s`;
     });
-
-    // Inicializar carrinho
+    
+    // Inicializar o carrinho
     updateCartDisplay();
 });
 
@@ -179,19 +202,17 @@ function updatePixQRCode() {
     pixQrCode.innerHTML = '';
     
     if (total > 0) {
-        const pixPayload = {
-            chave: 'morcegoburgers@gmail.com',
+        const pixInfo = {
+            chave: 'lmorcegoburgers@gmail.com',
             valor: total.toFixed(2),
-            descricao: 'BatBurger - Pedido de Lanches',
-            merchant: 'BatBurger Lanches',
-            cidade: 'Gotham City'
+            descricao: 'BatBurger - Pedido de Lanches'
         };
         
-        // Gerar QR Code com a chave por email
+        // Gerar QR Code (usando a biblioteca QRCode.js)
         new QRCode(pixQrCode, {
-            text: `00020126580014BR.GOV.BCB.PIX0136${pixPayload.chave}520400005303986540${pixPayload.valor}5802BR59${pixPayload.merchant.substring(0,25)}60${pixPayload.cidade.substring(0,15)}62070503***6304`,
-            width: 180,
-            height: 180,
+            text: `PIX:${pixInfo.chave}?amount=${pixInfo.valor}&message=${pixInfo.descricao}`,
+            width: 150,
+            height: 150,
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
@@ -199,41 +220,106 @@ function updatePixQRCode() {
     }
 }
 
-// Função para copiar a chave PIX
-function copyPixKey() {
-    const tempInput = document.createElement('input');
-    tempInput.value = 'morcegoburgers@gmail.com';
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
-    showNotification('Chave PIX copiada! Cole no seu app de banco.', 'success');
-}
-
-// Função para confirmar pagamento PIX
-function confirmPixPayment() {
+// Função para enviar o pedido via WhatsApp
+function sendOrder() {
     const cart = getCart();
-    if (cart.length === 0) {
-        showNotification('Seu carrinho está vazio!', 'error');
-        return;
-    }
-
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const nome = document.getElementById('nome').value;
+    const endereco = document.getElementById('endereco').value;
+    const telefone = document.getElementById('telefone').value;
+    const observacoes = document.getElementById('observacoes').value;
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    const troco = paymentMethod === 'dinheiro' ? document.getElementById('troco').value : '';
+    const receiptFile = document.getElementById('receipt-upload').files[0];
+    const whatsappNumber = '5533998351903';
     
-    if (!nome) {
-        showNotification('Por favor, informe seu nome antes de confirmar o pagamento', 'error');
+    if (cart.length === 0) {
+        showNotification('Seu carrinho está vazio! Adicione itens antes de finalizar.', 'error');
         return;
     }
     
-    showNotification(`Pagamento de R$ ${total.toFixed(2)} confirmado! Seu pedido está sendo preparado.`, 'success');
+    if (!nome || !endereco || !telefone) {
+        showNotification('Por favor, preencha todos os campos obrigatórios!', 'error');
+        return;
+    }
     
-    // Aqui você pode adicionar lógica para:
-    // 1. Enviar notificação para o administrador
-    // 2. Registrar o pedido no sistema
-    // 3. Limpar o carrinho
+    // Calcular total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // Montar mensagem
+    let message = `🦇 *NOVO PEDIDO BATBURGER* 🦇\n\n`;
+    message += `*Cliente:* ${nome}\n`;
+    message += `*Endereço:* ${endereco}\n`;
+    message += `*Telefone:* ${telefone}\n\n`;
+    message += `*ITENS DO PEDIDO:*\n`;
+    
+    cart.forEach(item => {
+        message += `- ${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+    });
+    
+    message += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
+    message += `*FORMA DE PAGAMENTO:* ${getPaymentMethodName(paymentMethod)}\n`;
+    
+    if (paymentMethod === 'dinheiro' && troco) {
+        message += `*Troco para:* R$ ${troco}\n`;
+    }
+    
+    if (paymentMethod === 'pix') {
+        message += `*Chave PIX:* lmorcegoburgers@gmail.com\n`;
+        message += `*Valor PIX:* R$ ${total.toFixed(2)}\n`;
+        
+        if (receiptFile) {
+            message += `\n*COMPROVANTE PIX:* ${receiptFile.name} (anexado)\n`;
+        } else {
+            message += `\n*ATENÇÃO:* Comprovante PIX não foi anexado!\n`;
+        }
+    }
+    
+    if (observacoes) {
+        message += `\n*OBSERVAÇÕES:*\n${observacoes}\n`;
+    }
+    
+    message += `\n🦇 Obrigado por escolher o BatBurger! Seu pedido será preparado e enviado pelo Robin o mais rápido possível! 🍔`;
+    
+    // Codificar mensagem para URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Criar link do WhatsApp
+    let whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    
+    // Se houver comprovante e for PIX, tentar enviar via API (simulação)
+    if (paymentMethod === 'pix' && receiptFile) {
+        // Na prática, você precisaria de um backend para receber o arquivo
+        // Aqui vamos apenas adicionar uma mensagem sobre o comprovante
+        showNotification('Comprovante anexado! Enviando pedido...', 'success');
+    }
+    
+    // Abrir WhatsApp
+    window.open(whatsappUrl, '_blank');
+    
+    // Limpar carrinho após envio
     saveCart([]);
     updateCartDisplay();
+    document.getElementById('nome').value = '';
+    document.getElementById('endereco').value = '';
+    document.getElementById('telefone').value = '';
+    document.getElementById('observacoes').value = '';
+    document.getElementById('troco').value = '';
+    document.getElementById('receipt-upload').value = '';
+    document.getElementById('file-name').style.display = 'none';
+    document.getElementById('send-receipt-btn').style.display = 'none';
+    
+    // Mostrar notificação de sucesso
+    showNotification('Pedido enviado com sucesso!', 'success');
+}
+
+// Função auxiliar para obter o nome do método de pagamento
+function getPaymentMethodName(method) {
+    switch (method) {
+        case 'cartao': return 'Cartão de Crédito/Débito';
+        case 'dinheiro': return 'Dinheiro';
+        case 'pix': return 'PIX';
+        default: return method;
+    }
 }
 
 // Função para mostrar notificações
