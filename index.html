@@ -21,7 +21,7 @@
         <h1>BAT<span>BURGER</span></h1>
         <p>🍔 O único delivery que te salva da fome até na madrugada! 🦇</p>
         <div class="order-counter">
-            <p>🦇 <span id="order-count" aria-live="polite">0</span> hambúrgueres salvos esta noite!</p>
+            <p>🦇 <span id="order-count">0</span> hambúrgueres salvos esta noite!</p>
         </div>
     </header>
 
@@ -114,15 +114,15 @@
             <h2>📋 SEUS DADOS PARA ENTREGA</h2>
             <div class="info-form">
                 <div class="form-group">
-                    <label for="nome">Seu Nome: <span class="required">*</span></label>
+                    <label for="nome">Seu Nome:</label>
                     <input type="text" id="nome" placeholder="Como devemos chamar você?" required aria-required="true">
                 </div>
                 <div class="form-group">
-                    <label for="endereco">Endereço: <span class="required">*</span></label>
+                    <label for="endereco">Endereço:</label>
                     <input type="text" id="endereco" placeholder="Rua, Número, Bairro" required aria-required="true">
                 </div>
                 <div class="form-group">
-                    <label for="telefone">Telefone: <span class="required">*</span></label>
+                    <label for="telefone">Telefone:</label>
                     <input type="tel" id="telefone" placeholder="(33) 99999-9999" required aria-required="true" pattern="^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$">
                 </div>
             </div>
@@ -158,6 +158,17 @@
                             <p>Valor total: <span id="pix-total">R$ 0,00</span></p>
                         </div>
                         <p class="pix-instructions">Escaneie o QR Code ou copie a chave PIX para pagamento</p>
+                        
+                        <!-- Nova área de PIX Copia e Cola -->
+                        <div class="pix-copy-paste">
+                            <h4>🦇 PIX COPIA E COLA</h4>
+                            <div id="pix-key">00020126580014BR.GOV.BCB.PIX0136morcegoburgers@gmail.com5204000053039865404${total}5802BR5925BRUNA LUISA DE OLIVEIRA QUAR6007NANUQUE62070503***6304</div>
+                            <button class="copy-btn" onclick="copyPixKey()">
+                                <i class="fas fa-copy"></i> COPIAR CÓDIGO
+                            </button>
+                            <p class="pix-instructions">Cole este código no seu aplicativo do banco para pagar via PIX</p>
+                        </div>
+                        
                         <p class="pix-instructions"><strong>Envie o comprovante para este WhatsApp após o pagamento</strong></p>
                     </div>
                 </div>
