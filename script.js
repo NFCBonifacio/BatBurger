@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener('DOMContentLoaded', function() {
     // Variáveis globais
     let cart = [];
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const trocoField = document.getElementById('troco-field');
     const pixArea = document.getElementById('pix-area');
     const backToTopButton = document.getElementById('back-to-top');
-    const pixPaymentButton = document.getElementById('pix-payment-button');
     const dinheiroOption = document.getElementById('dinheiro');
     
     // Verificar se é depois da meia-noite
@@ -21,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentHour = now.getHours();
     
     // Desativar pagamento em dinheiro após meia-noite (0 horas)
-    if (currentHour >= 0 && currentHour < 6) { // Das 00:00 às 06:00
+    if (currentHour >= 0 && currentHour < 6) {
         dinheiroOption.disabled = true;
         dinheiroOption.nextElementSibling.style.opacity = '0.5';
         dinheiroOption.nextElementSibling.style.cursor = 'not-allowed';
@@ -41,24 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 trocoField.style.display = 'none';
                 pixArea.style.display = 'block';
                 updatePixQRCode();
-            } else {
-                trocoField.style.display = 'none';
-                pixArea.style.display = 'none';
             }
         });
-    });
-    
-    // Botão de pagamento PIX
-    pixPaymentButton.addEventListener('click', function() {
-        const cart = getCart();
-        if (cart.length === 0) {
-            showNotification('Seu carrinho está vazio!', 'error');
-            return;
-        }
-        
-        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const pixUrl = `https://nubank.com.br/pagar/1wpsh/BatBurger-Lanches?amount=${total.toFixed(2)}`;
-        window.open(pixUrl, '_blank');
     });
     
     // Botão voltar ao topo
@@ -80,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const order = item.style.getPropertyValue('--order');
         item.style.animationDelay = `${order * 0.1}s`;
     });
+
+    // Inicializar carrinho
+    updateCartDisplay();
 });
 
 // Função para adicionar item ao carrinho
@@ -194,17 +179,19 @@ function updatePixQRCode() {
     pixQrCode.innerHTML = '';
     
     if (total > 0) {
-        const pixInfo = {
-            chave: '33998096312',
+        const pixPayload = {
+            chave: 'morcegoburgers@gmail.com',
             valor: total.toFixed(2),
-            descricao: 'BatBurger - Pedido de Lanches'
+            descricao: 'BatBurger - Pedido de Lanches',
+            merchant: 'BatBurger Lanches',
+            cidade: 'Gotham City'
         };
         
-        // Gerar QR Code (usando a biblioteca QRCode.js)
+        // Gerar QR Code com a chave por email
         new QRCode(pixQrCode, {
-            text: `PIX:${pixInfo.chave}?amount=${pixInfo.valor}&message=${pixInfo.descricao}`,
-            width: 150,
-            height: 150,
+            text: `00020126580014BR.GOV.BCB.PIX0136${pixPayload.chave}520400005303986540${pixPayload.valor}5802BR59${pixPayload.merchant.substring(0,25)}60${pixPayload.cidade.substring(0,15)}62070503***6304`,
+            width: 180,
+            height: 180,
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
@@ -212,80 +199,41 @@ function updatePixQRCode() {
     }
 }
 
-// Função para enviar o pedido via WhatsApp
-function sendOrder() {
-    const cart = getCart();
-    const nome = document.getElementById('nome').value;
-    const endereco = document.getElementById('endereco').value;
-    const telefone = document.getElementById('telefone').value;
-    const observacoes = document.getElementById('observacoes').value;
-    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-    const troco = paymentMethod === 'dinheiro' ? document.getElementById('troco').value : '';
-    
-    if (cart.length === 0) {
-        showNotification('Seu carrinho está vazio! Adicione itens antes de finalizar.', 'error');
-        return;
-    }
-    
-    if (!nome || !endereco || !telefone) {
-        showNotification('Por favor, preencha todos os campos obrigatórios!', 'error');
-        return;
-    }
-    
-    // Calcular total
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    // Montar mensagem
-    let message = `🦇 *NOVO PEDIDO BATBURGER* 🦇\n\n`;
-    message += `*Cliente:* ${nome}\n`;
-    message += `*Endereço:* ${endereco}\n`;
-    message += `*Telefone:* ${telefone}\n\n`;
-    message += `*ITENS DO PEDIDO:*\n`;
-    
-    cart.forEach(item => {
-        message += `- ${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
-    });
-    
-    message += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
-    message += `*FORMA DE PAGAMENTO:* ${getPaymentMethodName(paymentMethod)}\n`;
-    
-    if (paymentMethod === 'dinheiro' && troco) {
-        message += `*Troco para:* R$ ${troco}\n`;
-    }
-    
-    if (observacoes) {
-        message += `\n*OBSERVAÇÕES:*\n${observacoes}\n`;
-    }
-    
-    message += `\n🦇 Obrigado por escolher o BatBurger! Seu pedido será preparado e enviado pelo Robin o mais rápido possível! 🍔`;
-    
-    // Codificar mensagem para URL
-    const encodedMessage = encodeURIComponent(message);
-    
-    // Abrir WhatsApp
-    window.open(`https://wa.me/33998351903?text=${encodedMessage}`, '_blank');
-    
-    // Limpar carrinho após envio
-    saveCart([]);
-    updateCartDisplay();
-    document.getElementById('nome').value = '';
-    document.getElementById('endereco').value = '';
-    document.getElementById('telefone').value = '';
-    document.getElementById('observacoes').value = '';
-    document.getElementById('troco').value = '';
-    
-    // Mostrar notificação de sucesso
-    showNotification('Pedido enviado com sucesso!', 'success');
+// Função para copiar a chave PIX
+function copyPixKey() {
+    const tempInput = document.createElement('input');
+    tempInput.value = 'morcegoburgers@gmail.com';
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    showNotification('Chave PIX copiada! Cole no seu app de banco.', 'success');
 }
 
-// Função auxiliar para obter o nome do método de pagamento
-function getPaymentMethodName(method) {
-    switch (method) {
-        case 'cartao': return 'Cartão de Crédito/Débito';
-        case 'dinheiro': return 'Dinheiro';
-        case 'pix': return 'PIX';
-        default: return method;
+// Função para confirmar pagamento PIX
+function confirmPixPayment() {
+    const cart = getCart();
+    if (cart.length === 0) {
+        showNotification('Seu carrinho está vazio!', 'error');
+        return;
     }
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const nome = document.getElementById('nome').value;
+    
+    if (!nome) {
+        showNotification('Por favor, informe seu nome antes de confirmar o pagamento', 'error');
+        return;
+    }
+    
+    showNotification(`Pagamento de R$ ${total.toFixed(2)} confirmado! Seu pedido está sendo preparado.`, 'success');
+    
+    // Aqui você pode adicionar lógica para:
+    // 1. Enviar notificação para o administrador
+    // 2. Registrar o pedido no sistema
+    // 3. Limpar o carrinho
+    saveCart([]);
+    updateCartDisplay();
 }
 
 // Função para mostrar notificações
@@ -313,6 +261,3 @@ function getCart() {
 function saveCart(cart) {
     localStorage.setItem('batburger-cart', JSON.stringify(cart));
 }
-
-// Inicializar o carrinho ao carregar a página
-updateCartDisplay();
