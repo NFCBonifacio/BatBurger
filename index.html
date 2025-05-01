@@ -12,11 +12,11 @@
     <meta name="author" content="BatBurger">
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+    <a href="#main-content" class="skip-link" aria-label="Pular para o conteúdo principal">Pular para o conteúdo principal</a>
 
     <header>
         <div class="bat-logo">
-            <img src="https://github.com/NFCBonifacio/BATBURGER/blob/main/transferir.png?raw=true" alt="Batman Logo" width="80">
+            <img src="https://github.com/NFCBonifacio/BATBURGER/blob/main/transferir.png?raw=true" alt="Logo do BatBurger" width="80" loading="lazy">
         </div>
         <h1>BAT<span>BURGER</span></h1>
         <p>🍔 O único delivery que te salva da fome até na madrugada! 🦇</p>
@@ -33,67 +33,67 @@
 
             <div class="menu-items-container">
                 <div class="item" style="--order: 1;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/hamburguer.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/hamburguer.png?raw=true')" role="img" aria-label="Hambúrguer do Robin"></div>
                     <h3>Hambúrguer do Robin</h3>
                     <p>Pão, bife, alface, tomate, milho e batata palha.</p>
                     <span class="price">R$ 18,90</span>
-                    <button onclick="addToCart('Hambúrguer do Robin', 18.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('Hambúrguer do Robin', 18.90)" aria-label="Adicionar Hambúrguer do Robin ao carrinho">PEDIR AGORA</button>
                 </div>
 
                 <div class="item" style="--order: 2;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xburguer.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xburguer.png?raw=true')" role="img" aria-label="X-Batman"></div>
                     <h3>X-Batman</h3>
                     <p>Pão, bife, queijo, batata palha, milho, alface e tomate.</p>
                     <span class="price">R$ 22,90</span>
-                    <button onclick="addToCart('X-Batman', 22.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('X-Batman', 22.90)" aria-label="Adicionar X-Batman ao carrinho">PEDIR AGORA</button>
                 </div>
 
                 <div class="item" style="--order: 3;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xegg.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xegg.png?raw=true')" role="img" aria-label="X-Egg do Coringa"></div>
                     <h3>X-Egg do Coringa</h3>
                     <p>Pão, bife, queijo, ovo, batata palha, milho e tomate.</p>
                     <span class="price">R$ 24,90</span>
-                    <button onclick="addToCart('X-Egg do Coringa', 24.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('X-Egg do Coringa', 24.90)" aria-label="Adicionar X-Egg do Coringa ao carrinho">PEDIR AGORA</button>
                 </div>
 
                 <div class="item" style="--order: 4;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xbacon.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xbacon.png?raw=true')" role="img" aria-label="X-Bacon do Alfred"></div>
                     <h3>X-Bacon do Alfred</h3>
                     <p>Pão, bife, queijo, bacon, batata palha, milho, alface e tomate.</p>
                     <span class="price">R$ 26,90</span>
-                    <button onclick="addToCart('X-Bacon do Alfred', 26.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('X-Bacon do Alfred', 26.90)" aria-label="Adicionar X-Bacon do Alfred ao carrinho">PEDIR AGORA</button>
                 </div>
 
                 <div class="item" style="--order: 5;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/eggbacon.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/eggbacon.png?raw=true')" role="img" aria-label="X-Egg Bacon do Asa Noturna"></div>
                     <h3>X-Egg Bacon do Asa Noturna</h3>
                     <p>Pão, bife, queijo, bacon, ovo, batata palha, milho, alface e tomate.</p>
                     <span class="price">R$ 28,90</span>
-                    <button onclick="addToCart('X-Egg Bacon do Asa Noturna', 28.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('X-Egg Bacon do Asa Noturna', 28.90)" aria-label="Adicionar X-Egg Bacon do Asa Noturna ao carrinho">PEDIR AGORA</button>
                 </div>
 
                 <div class="item" style="--order: 6;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xtudo.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/xtudo.png?raw=true')" role="img" aria-label="X-Tudo do Cavaleiro das Trevas"></div>
                     <h3>X-Tudo do Cavaleiro das Trevas</h3>
                     <p>Pão, bife, calabresa, ovo, bacon, presunto, alface, banana, tomate, milho, batata palha e molho especial.</p>
                     <span class="price">R$ 32,90</span>
-                    <button onclick="addToCart('X-Tudo do Cavaleiro das Trevas', 32.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('X-Tudo do Cavaleiro das Trevas', 32.90)" aria-label="Adicionar X-Tudo do Cavaleiro das Trevas ao carrinho">PEDIR AGORA</button>
                 </div>
 
                 <div class="item" style="--order: 7;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/picanha90.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/picanha90.png?raw=true')" role="img" aria-label="X-Picanha 90g do Comissário Gordon"></div>
                     <h3>X-Picanha 90g do Comissário Gordon</h3>
                     <p>Pão, bife de picanha 90g, calabresa, ovo, presunto, alface, tomate, milho, banana, batata palha e molho especial.</p>
                     <span class="price">R$ 34,90</span>
-                    <button onclick="addToCart('X-Picanha 90g do Comissário Gordon', 34.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('X-Picanha 90g do Comissário Gordon', 34.90)" aria-label="Adicionar X-Picanha 90g do Comissário Gordon ao carrinho">PEDIR AGORA</button>
                 </div>
 
                 <div class="item" style="--order: 8;">
-                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/picanha140.png?raw=true')"></div>
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BATBURGER/blob/main/picanha140.png?raw=true')" role="img" aria-label="X-Picanha 140g do Batman"></div>
                     <h3>X-Picanha 140g do Batman</h3>
                     <p>Pão, bife de 140g, presunto, ovo, calabresa, banana, bacon, alface, tomate, milho, batata palha e molho especial.</p>
                     <span class="price">R$ 38,90</span>
-                    <button onclick="addToCart('X-Picanha 140g do Batman', 38.90)">PEDIR AGORA</button>
+                    <button onclick="addToCart('X-Picanha 140g do Batman', 38.90)" aria-label="Adicionar X-Picanha 140g do Batman ao carrinho">PEDIR AGORA</button>
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@
         <div class="cart">
             <h2>🛒 SEU PEDIDO <span id="cart-count">(0)</span></h2>
             <div id="cart-empty" class="cart-empty">
-                <i class="fas fa-shopping-basket"></i>
+                <i class="fas fa-shopping-basket" aria-hidden="true"></i>
                 <p>Seu carrinho está vazio</p>
             </div>
             <ul id="cart-items"></ul>
@@ -115,15 +115,15 @@
             <div class="info-form">
                 <div class="form-group">
                     <label for="nome">Seu Nome:</label>
-                    <input type="text" id="nome" placeholder="Como devemos chamar você?" required>
+                    <input type="text" id="nome" placeholder="Como devemos chamar você?" required aria-required="true">
                 </div>
                 <div class="form-group">
                     <label for="endereco">Endereço:</label>
-                    <input type="text" id="endereco" placeholder="Rua, Número, Bairro" required>
+                    <input type="text" id="endereco" placeholder="Rua, Número, Bairro" required aria-required="true">
                 </div>
                 <div class="form-group">
                     <label for="telefone">Telefone:</label>
-                    <input type="tel" id="telefone" placeholder="(33) 99999-9999" required>
+                    <input type="tel" id="telefone" placeholder="(33) 99999-9999" required aria-required="true" pattern="^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$">
                 </div>
             </div>
 
@@ -131,22 +131,22 @@
                 <h2>💳 FORMA DE PAGAMENTO</h2>
                 <div class="payment-options">
                     <div class="payment-option">
-                        <input type="radio" id="cartao" name="payment" value="cartao" checked>
+                        <input type="radio" id="cartao" name="payment" value="cartao" checked aria-checked="true">
                         <label for="cartao">Cartão</label>
                     </div>
                     <div class="payment-option">
-                        <input type="radio" id="dinheiro" name="payment" value="dinheiro">
+                        <input type="radio" id="dinheiro" name="payment" value="dinheiro" aria-checked="false">
                         <label for="dinheiro">Dinheiro</label>
                     </div>
                     <div class="payment-option">
-                        <input type="radio" id="pix" name="payment" value="pix">
+                        <input type="radio" id="pix" name="payment" value="pix" aria-checked="false">
                         <label for="pix">PIX</label>
                     </div>
                 </div>
 
                 <div id="troco-field" class="form-group" style="display: none;">
                     <label for="troco">Valor para troco:</label>
-                    <input type="text" id="troco" placeholder="Informe o valor que você vai pagar">
+                    <input type="text" id="troco" placeholder="Informe o valor que você vai pagar" inputmode="numeric">
                 </div>
 
                 <div id="pix-area" style="display: none;">
@@ -154,7 +154,7 @@
                         <h3>🦇 PAGAMENTO VIA PIX</h3>
                         <p>Chave PIX: <strong>lmorcegoburgers@gmail.com</strong></p>
                         <div class="pix-qrcode-container">
-                            <div id="pix-qrcode"></div>
+                            <div id="pix-qrcode" role="img" aria-label="QR Code para pagamento via PIX"></div>
                             <p>Valor total: <span id="pix-total">R$ 0,00</span></p>
                         </div>
                         <p class="pix-instructions">Escaneie o QR Code ou copie a chave PIX para pagamento</p>
@@ -163,11 +163,11 @@
                             <h4>📤 ENVIE SEU COMPROVANTE</h4>
                             <input type="file" id="receipt-upload" accept="image/*,.pdf" style="display: none;">
                             <label for="receipt-upload" class="upload-btn">
-                                <i class="fas fa-cloud-upload-alt"></i> Selecionar Comprovante
+                                <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Selecionar Comprovante
                             </label>
                             <span id="file-name" style="display: block; margin-top: 10px; color: #aaa; font-size: 0.9em;"></span>
                             <button id="send-receipt-btn" class="pix-payment-btn" style="margin-top: 10px; display: none;">
-                                <i class="fas fa-paper-plane"></i> Enviar Comprovante
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i> Enviar Comprovante
                             </button>
                         </div>
                     </div>
@@ -176,11 +176,11 @@
 
             <div class="form-group full-width">
                 <label for="observacoes">Observações:</label>
-                <textarea id="observacoes" placeholder="Alguma observação sobre seu pedido?"></textarea>
+                <textarea id="observacoes" placeholder="Alguma observação sobre seu pedido?" aria-label="Campo para observações sobre o pedido"></textarea>
             </div>
 
-            <button onclick="sendOrder()" class="checkout-btn">
-                <i class="fab fa-whatsapp"></i> FINALIZAR PEDIDO
+            <button onclick="sendOrder()" class="checkout-btn" aria-label="Finalizar pedido e enviar por WhatsApp">
+                <i class="fab fa-whatsapp" aria-hidden="true"></i> FINALIZAR PEDIDO
             </button>
         </div>
 
@@ -189,34 +189,41 @@
             <div class="review-container">
                 <div class="review">
                     <div class="review-header">
-                        <img src="https://i.imgur.com/JzF1H3M.png" alt="Batman">
+                        <img src="https://i.imgur.com/JzF1H3M.png" alt="Batman" loading="lazy">
                         <h3>Batman</h3>
-                        <div class="stars">★★★★★</div>
+                        <div class="stars" aria-label="5 estrelas">★★★★★</div>
                     </div>
                     <p>"O BatBurger é a única coisa que me faz sair da Batcaverna à noite."</p>
                 </div>
                 <div class="review">
                     <div class="review-header">
-                        <img src="https://i.imgur.com/8QZQZ3Q.png" alt="Robin">
+                        <img src="https://i.imgur.com/8QZQZ3Q.png" alt="Robin" loading="lazy">
                         <h3>Robin</h3>
-                        <div class="stars">★★★★★</div>
+                        <div class="stars" aria-label="5 estrelas">★★★★★</div>
                     </div>
                     <p>"O hambúrguer do Robin é tão incrível quanto eu!"</p>
                 </div>
                 <div class="review">
                     <div class="review-header">
-                        <img src="https://i.imgur.com/8QZQZ3Q.png" alt="Arlequina">
+                        <img src="https://i.imgur.com/8QZQZ3Q.png" alt="Arlequina" loading="lazy">
                         <h3>Arlequina</h3>
-                        <div class="stars">★★★★☆</div>
+                        <div class="stars" aria-label="4 estrelas">★★★★☆</div>
                     </div>
                     <p>"Até eu, que sou do mal, não resisto a um BatBurger!"</p>
                 </div>
             </div>
         </div>
+
+        <div class="about-section">
+            <h2>🦇 SOBRE O BATBURGER</h2>
+            <p>Fundado em Gotham City, o BatBurger surgiu para trazer justiça à fome noturna dos cidadãos. Nossos ingredientes são selecionados pessoalmente pelo Comissário Gordon e nossos hambúrgueres são preparados com o mesmo cuidado que o Batman tem com a cidade.</p>
+            <p>🕒 Funcionamento: Todos os dias, das 18h às 4h</p>
+            <p>📍 Entregamos em toda Gotham City</p>
+        </div>
     </main>
 
-    <button id="back-to-top" title="Voltar ao topo">
-        <i class="fas fa-arrow-up"></i>
+    <button id="back-to-top" title="Voltar ao topo" aria-label="Voltar ao topo da página">
+        <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
 
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
