@@ -189,7 +189,7 @@ function updatePixQRCode() {
     
     if (total > 0) {
         const pixInfo = {
-            chave: 'lmorcegoburgers@gmail.com',
+            chave: 'morcegoburgers@gmail.com',
             valor: total.toFixed(2),
             descricao: 'BatBurger - Pedido de Lanches'
         };
