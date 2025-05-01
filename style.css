@@ -1,3 +1,4 @@
+/* style.css */
 /* Estilo Gotham City */
 body {
     font-family: 'Roboto', sans-serif;
@@ -36,7 +37,6 @@ body::before {
     top: 0;
 }
 
-/* Cabeçalho */
 header {
     text-align: center;
     padding: 20px;
@@ -82,7 +82,6 @@ header p {
     font-weight: bold;
 }
 
-/* Cardápio */
 .menu {
     display: flex;
     flex-wrap: wrap;
@@ -195,7 +194,6 @@ button:hover {
     box-shadow: 0 0 15px #ffd700;
 }
 
-/* Carrinho */
 .cart {
     background: rgba(30, 30, 30, 0.95);
     margin: 30px auto;
@@ -277,7 +275,6 @@ button:hover {
     margin: 20px 0;
 }
 
-/* Seção de Informações do Cliente */
 .customer-info {
     background: rgba(30, 30, 30, 0.9);
     margin: 20px auto;
@@ -333,7 +330,6 @@ button:hover {
     box-shadow: 0 0 5px #ffd700;
 }
 
-/* Seção de Pagamento */
 .payment-method {
     margin: 20px 0;
     padding: 15px;
@@ -392,64 +388,22 @@ button:hover {
     color: #e0e0e0;
 }
 
-/* Área do PIX */
 #pix-area {
     margin-top: 15px;
     padding: 15px;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
+    text-align: center;
 }
 
 .pix-info h3 {
     color: #ffd700;
     font-family: 'Bangers', cursive;
     margin-bottom: 10px;
-    text-align: center;
 }
 
-.pix-header {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-.pix-details {
-    flex: 1;
-    min-width: 200px;
-}
-
-.pix-key-display {
-    background: rgba(0,0,0,0.3);
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: 1px solid #ffd700;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 10px 0;
-}
-
-.pix-key-display button {
-    background: transparent;
-    border: none;
-    color: #ffd700;
-    cursor: pointer;
-    padding: 5px;
-    font-size: 1.2em;
-    width: auto;
-    margin: 0;
-}
-
-.pix-key-display button:hover {
-    background: transparent;
-    color: #fff;
-}
-
-.pix-total {
-    font-size: 1.2em;
-    margin: 15px 0;
+.pix-info p {
+    margin: 5px 0;
 }
 
 .pix-qrcode-container {
@@ -464,49 +418,56 @@ button:hover {
     margin: 0 auto;
 }
 
+#pix-total {
+    font-weight: bold;
+    color: #ff5555;
+}
+
 .pix-instructions {
-    margin-top: 20px;
-}
-
-.pix-instructions h4 {
-    color: #ffd700;
-    margin-bottom: 10px;
-}
-
-.pix-instructions ol {
-    padding-left: 20px;
-    margin: 10px 0;
-}
-
-.pix-instructions li {
-    margin-bottom: 8px;
-}
-
-.pix-confirmation {
-    text-align: center;
-    margin-top: 25px;
-}
-
-.pix-confirm-btn {
-    background: #4CAF50;
-    color: white;
-    border: 2px solid #4CAF50;
-    padding: 12px 25px;
-    font-size: 1.1em;
-}
-
-.pix-confirm-btn:hover {
-    background: #388E3C;
-    border-color: #388E3C;
-}
-
-.pix-note {
-    font-size: 0.8em;
+    font-size: 0.9em;
     color: #aaa;
     margin-top: 10px;
 }
 
-/* Textarea observações */
+.pix-payment-btn {
+    background: #32BCAD;
+    color: white;
+    border: 2px solid #32BCAD;
+    margin-top: 10px;
+}
+
+.pix-payment-btn:hover {
+    background: #279e8f;
+    border-color: #279e8f;
+    box-shadow: 0 0 15px #32BCAD;
+}
+
+.receipt-upload {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.upload-btn {
+    display: inline-block;
+    background: #1a1a1a;
+    color: #ffd700;
+    border: 2px solid #ffd700;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.upload-btn:hover {
+    background: #ffd700;
+    color: #1a1a1a;
+    box-shadow: 0 0 10px #ffd700;
+}
+
 .full-width {
     width: 100%;
 }
@@ -547,7 +508,6 @@ textarea:focus {
     box-shadow: 0 0 15px #25D366;
 }
 
-/* Botão de remover */
 .remove-btn {
     background: #ff4444;
     color: white;
@@ -569,7 +529,73 @@ textarea:focus {
     transform: scale(1.1);
 }
 
-/* Botão Voltar ao Topo */
+.reviews {
+    background: rgba(30, 30, 30, 0.9);
+    margin: 30px auto;
+    padding: 25px;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    border: 2px solid #ffd700;
+}
+
+.reviews h2 {
+    font-family: 'Bangers', cursive;
+    color: #ffd700;
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.review-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.review {
+    background: rgba(40, 40, 40, 0.8);
+    border-radius: 8px;
+    padding: 15px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #ffd700;
+}
+
+.review-header h3 {
+    margin: 0;
+    color: #ffd700;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2em;
+}
+
+.stars {
+    color: #ffd700;
+    margin-left: auto;
+}
+
+.review p {
+    margin: 0;
+    font-style: italic;
+    color: #ccc;
+}
+
 #back-to-top {
     position: fixed;
     bottom: 20px;
@@ -595,7 +621,6 @@ textarea:focus {
     transform: scale(1.1);
 }
 
-/* Notificações */
 .notification {
     position: fixed;
     bottom: 20px;
@@ -639,7 +664,6 @@ textarea:focus {
     to { opacity: 0; }
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     header h1 {
         font-size: 2.5em;
@@ -657,14 +681,6 @@ textarea:focus {
     .payment-options {
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    .pix-header {
-        flex-direction: column;
-    }
-    
-    .pix-details {
-        width: 100%;
     }
 }
 
@@ -685,5 +701,9 @@ textarea:focus {
     
     .customer-info {
         padding: 15px;
+    }
+
+    .review {
+        width: 100%;
     }
 }
