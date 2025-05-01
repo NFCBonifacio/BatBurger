@@ -1,9 +1,8 @@
-// script.js - Versão Melhorada
+// script.js - Versão Simplificada
 document.addEventListener('DOMContentLoaded', function() {
     // Variáveis globais
     let cart = [];
     let orderCount = 0;
-    let receiptFile = null;
     const cartItems = document.getElementById('cart-items');
     const cartEmpty = document.getElementById('cart-empty');
     const cartCount = document.getElementById('cart-count');
@@ -14,26 +13,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const trocoField = document.getElementById('troco-field');
     const pixArea = document.getElementById('pix-area');
     const backToTopButton = document.getElementById('back-to-top');
-    const receiptUpload = document.getElementById('receipt-upload');
-    const fileName = document.getElementById('file-name');
-    const sendReceiptBtn = document.getElementById('send-receipt-btn');
-    const dinheiroOption = document.getElementById('dinheiro');
     const whatsappNumber = '5533998351903'; // Seu número de WhatsApp
     
-    // Verificar se é depois da meia-noite
+    // Verificar horário de funcionamento (21h às 3h)
     const now = new Date();
     const currentHour = now.getHours();
     
-    // Desativar pagamento em dinheiro após meia-noite (0 horas)
-    if (currentHour >= 0 && currentHour < 6) {
-        dinheiroOption.disabled = true;
-        dinheiroOption.nextElementSibling.style.opacity = '0.5';
-        dinheiroOption.nextElementSibling.style.cursor = 'not-allowed';
-        dinheiroOption.nextElementSibling.setAttribute('aria-disabled', 'true');
+    if (currentHour < 21 && currentHour > 3) {
+        showNotification('Estamos fechados no momento. Funcionamos das 21h às 3h.', 'warning');
     }
-    
-    // Inicializar contador de pedidos com um valor aleatório para simular atividade
-    orderCount = Math.floor(Math.random() * 50) + 10;
+
+    // Inicializar contador de pedidos zerado
+    orderCount = 0;
     updateOrderCount();
     
     // Configurar listeners para os métodos de pagamento
@@ -52,39 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 pixArea.style.display = 'none';
             }
         });
-    });
-    
-    // Upload de comprovante
-    receiptUpload.addEventListener('change', function(e) {
-        if (e.target.files.length > 0) {
-            receiptFile = e.target.files[0];
-            if (receiptFile.size > 5 * 1024 * 1024) { // 5MB max
-                showNotification('Arquivo muito grande. Máximo de 5MB permitido.', 'error');
-                receiptFile = null;
-                e.target.value = '';
-                fileName.style.display = 'none';
-                sendReceiptBtn.style.display = 'none';
-                return;
-            }
-            
-            fileName.textContent = `Arquivo selecionado: ${receiptFile.name}`;
-            fileName.style.display = 'block';
-            sendReceiptBtn.style.display = 'block';
-        } else {
-            receiptFile = null;
-            fileName.style.display = 'none';
-            sendReceiptBtn.style.display = 'none';
-        }
-    });
-    
-    // Enviar comprovante (simulação)
-    sendReceiptBtn.addEventListener('click', function() {
-        if (receiptFile) {
-            showNotification('Comprovante enviado com sucesso!', 'success');
-            // Na prática, você precisaria enviar para um servidor
-        } else {
-            showNotification('Nenhum arquivo selecionado!', 'error');
-        }
     });
     
     // Botão voltar ao topo
@@ -137,9 +95,6 @@ function addToCart(itemName, itemPrice) {
     updateCartDisplay();
     updateOrderCount();
     showNotification(`${itemName} adicionado ao carrinho!`, 'success');
-    
-    // Rolagem suave para o carrinho
-    document.querySelector('.cart').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // Função para remover item do carrinho
@@ -260,7 +215,6 @@ function sendOrder() {
     const observacoes = document.getElementById('observacoes').value.trim();
     const paymentMethod = document.querySelector('input[name="payment"]:checked');
     const troco = paymentMethod.value === 'dinheiro' ? document.getElementById('troco').value.trim() : '';
-    const receiptFile = document.getElementById('receipt-upload').files[0];
     const whatsappNumber = '5533998351903';
     
     if (!paymentMethod) {
@@ -316,30 +270,20 @@ function sendOrder() {
     if (paymentMethod.value === 'pix') {
         message += `*Chave PIX:* lmorcegoburgers@gmail.com\n`;
         message += `*Valor PIX:* R$ ${total.toFixed(2)}\n`;
-        
-        if (receiptFile) {
-            message += `\n*COMPROVANTE PIX:* ${receiptFile.name} (anexado)\n`;
-        } else {
-            message += `\n*ATENÇÃO:* Comprovante PIX não foi anexado!\n`;
-        }
+        message += `\n*ENVIE O COMPROVANTE PARA ESTE NÚMERO APÓS O PAGAMENTO*\n`;
     }
     
     if (observacoes) {
         message += `\n*OBSERVAÇÕES:*\n${observacoes}\n`;
     }
     
-    message += `\n🦇 Obrigado por escolher o BatBurger! Seu pedido será preparado e enviado pelo Robin o mais rápido possível! 🍔`;
+    message += `\n🦇 Obrigado por escolher o BatBurger! Seu pedido será preparado e enviado o mais rápido possível! 🍔`;
     
     // Codificar mensagem para URL
     const encodedMessage = encodeURIComponent(message);
     
     // Criar link do WhatsApp
     let whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    
-    // Se houver comprovante e for PIX, tentar enviar via API (simulação)
-    if (paymentMethod.value === 'pix' && receiptFile) {
-        showNotification('Comprovante anexado! Enviando pedido...', 'success');
-    }
     
     // Abrir WhatsApp
     window.open(whatsappUrl, '_blank');
@@ -352,9 +296,6 @@ function sendOrder() {
     document.getElementById('telefone').value = '';
     document.getElementById('observacoes').value = '';
     document.getElementById('troco').value = '';
-    document.getElementById('receipt-upload').value = '';
-    document.getElementById('file-name').style.display = 'none';
-    document.getElementById('send-receipt-btn').style.display = 'none';
     
     // Mostrar notificação de sucesso
     showNotification('Pedido enviado com sucesso!', 'success');
