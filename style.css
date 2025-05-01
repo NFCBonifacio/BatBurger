@@ -21,6 +21,85 @@ body::before {
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
     z-index: -1;
+} 
+/* Estilos do PIX Automatizado */
+.pix-header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.pix-details {
+    flex: 1;
+    min-width: 200px;
+}
+
+.pix-key-display {
+    background: rgba(0,0,0,0.3);
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #ffd700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.pix-key-display button {
+    background: transparent;
+    border: none;
+    color: #ffd700;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.2em;
+    width: auto;
+    margin: 0;
+}
+
+.pix-key-display button:hover {
+    background: transparent;
+    color: #fff;
+}
+
+.pix-total {
+    font-size: 1.2em;
+    margin: 15px 0;
+}
+
+.pix-confirmation {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.pix-confirm-btn {
+    background: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+    padding: 12px 25px;
+    font-size: 1.1em;
+}
+
+.pix-confirm-btn:hover {
+    background: #388E3C;
+    border-color: #388E3C;
+}
+
+.pix-note {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+    .pix-header {
+        flex-direction: column;
+    }
+    
+    .pix-details {
+        width: 100%;
+    }
 }
 
 /* Skip link para acessibilidade */
