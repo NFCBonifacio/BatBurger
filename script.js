@@ -190,15 +190,68 @@ function updatePixQRCode() {
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const pixQrCode = document.getElementById('pix-qrcode');
     
-    // Limpar QR Code anterior
     pixQrCode.innerHTML = '';
     
     if (total > 0) {
-        const pixInfo = {
-            chave: '33998096312',
+        const pixPayload = {
+            chave: 'morcegoburgers@gmail.com',
             valor: total.toFixed(2),
-            descricao: 'BatBurger - Pedido de Lanches'
+            descricao: 'BatBurger - Pedido de Lanches',
+            merchant: 'BatBurger Lanches',
+            cidade: 'Gotham City'
         };
+        
+        // Gerar QR Code com a chave por email
+        new QRCode(pixQrCode, {
+            text: `00020126580014BR.GOV.BCB.PIX0136${pixPayload.chave}520400005303986540${pixPayload.valor}5802BR59${pixPayload.merchant.substring(0,25)}60${pixPayload.cidade.substring(0,15)}62070503***6304`,
+            width: 180,
+            height: 180,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+}
+
+// Função para copiar a chave PIX
+function copyPixKey() {
+    const tempInput = document.createElement('input');
+    tempInput.value = 'morcegoburgers@gmail.com';
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    showNotification('Chave PIX copiada! Cole no seu app de banco.', 'success');
+}
+
+// Função para confirmar pagamento PIX
+function confirmPixPayment() {
+    const cart = getCart();
+    if (cart.length === 0) {
+        showNotification('Seu carrinho está vazio!', 'error');
+        return;
+    }
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const nome = document.getElementById('nome').value;
+    
+    if (!nome) {
+        showNotification('Por favor, informe seu nome antes de confirmar o pagamento', 'error');
+        return;
+    }
+    
+    showNotification(`Pagamento de R$ ${total.toFixed(2)} confirmado! Seu pedido está sendo preparado.`, 'success');
+    
+    // Aqui você pode adicionar lógica para:
+    // 1. Enviar notificação para o administrador
+    // 2. Registrar o pedido no sistema
+    // 3. Limpar o carrinho
+    saveCart([]);
+    updateCartDisplay();
+    
+    // Opcional: Redirecionar para página de agradecimento
+    // window.location.href = 'pedido-confirmado.html';
+}
         
         // Gerar QR Code (usando a biblioteca QRCode.js)
         new QRCode(pixQrCode, {
