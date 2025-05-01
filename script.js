@@ -178,12 +178,70 @@ function updateOrderCount() {
     }
 }
 
-// Função para atualizar o QR Code do PIX
+// Atualize a função updatePixQRCode
 function updatePixQRCode() {
     const cart = getCart();
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const pixQrCode = document.getElementById('pix-qrcode');
     
+    pixQrCode.innerHTML = '';
+    
+    if (total > 0) {
+        const pixInfo = {
+            chave: 'morcegoburgers@gmail.com', // Chave PIX corrigida
+            nome: 'BatBurger',
+            cidade: 'Gotham City',
+            valor: total.toFixed(2),
+            identificador: 'BAT' + Math.floor(Math.random() * 10000)
+        };
+
+        const payload = [
+            '000201',
+            '2636',
+            '0014br.gov.bcb.pix',
+            '01' + pixInfo.chave.length.toString().padStart(2, '0') + pixInfo.chave,
+            '52040000',
+            '5303986',
+            '54' + pixInfo.valor.length.toString().padStart(2, '0') + pixInfo.valor,
+            '5802BR',
+            '59' + pixInfo.nome.length.toString().padStart(2, '0') + pixInfo.nome,
+            '60' + pixInfo.cidade.length.toString().padStart(2, '0') + pixInfo.cidade,
+            '62' + (pixInfo.identificador.length + 4).toString().padStart(2, '0') +
+                '05' + pixInfo.identificador.length.toString().padStart(2, '0') + pixInfo.identificador,
+            '6304'
+        ].join('');
+
+        const crc = calculateCRC16(payload);
+        const payloadFinal = payload + crc;
+
+        new QRCode(pixQrCode, {
+            text: payloadFinal,
+            width: 150,
+            height: 150,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+}
+
+// Adicione esta nova função para copiar a chave PIX
+function copyPixKey() {
+    const pixKeyInput = document.getElementById('pix-key');
+    pixKeyInput.select();
+    document.execCommand('copy');
+    
+    // Mostrar feedback visual
+    const copyButton = event.currentTarget;
+    const originalText = copyButton.innerHTML;
+    copyButton.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+    
+    setTimeout(() => {
+        copyButton.innerHTML = originalText;
+    }, 2000);
+    
+    showNotification('Chave PIX copiada! Cole no seu app bancário.', 'success');
+}
     // Limpar QR Code anterior
     pixQrCode.innerHTML = '';
     
@@ -222,21 +280,16 @@ function sendOrder() {
         return;
     }
     
-    if (cart.length === 0) {
-        showNotification('Seu carrinho está vazio! Adicione itens antes de finalizar.', 'error');
-        return;
-    }
-    
-    if (!nome || !endereco || !telefone) {
-        showNotification('Por favor, preencha todos os campos obrigatórios!', 'error');
-        
-        // Destacar campos faltantes
-        if (!nome) document.getElementById('nome').focus();
-        else if (!endereco) document.getElementById('endereco').focus();
-        else if (!telefone) document.getElementById('telefone').focus();
-        
-        return;
-    }
+    if (paymentMethod.value === 'pix') {
+    message += `*Chave PIX:* morcegoburgers@gmail.com\n`;
+    message += `*Valor PIX:* R$ ${total.toFixed(2)}\n`;
+    message += `\n*INSTRUÇÕES PARA PAGAMENTO:*\n`;
+    message += `1. Abra seu app bancário\n`;
+    message += `2. Toque em "Pagar com PIX"\n`;
+    message += `3. Cole a chave PIX copiada\n`;
+    message += `4. Confirme o valor e pague\n`;
+    message += `5. Envie o comprovante para este WhatsApp\n`;
+}
     
     // Validar telefone (formato simples)
     const phoneRegex = /^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/;
