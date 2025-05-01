@@ -1,5 +1,5 @@
 /* style.css */
-/* Estilo Gotham City - Versão Corrigida */
+/* Estilo Gotham City - Versão Simplificada */
 :root {
     --primary-color: #ffd700;
     --secondary-color: #1a1a1a;
@@ -143,7 +143,6 @@ header p {
     transition: all 0.3s;
     animation: fadeIn 0.5s ease-out forwards;
     opacity: 0;
-    will-change: transform, opacity;
 }
 
 @keyframes fadeIn {
@@ -375,10 +374,6 @@ button:focus {
     border-color: #ff4444;
 }
 
-.required {
-    color: var(--accent-color);
-}
-
 .payment-method {
     margin: 20px 0;
     padding: 15px;
@@ -493,6 +488,47 @@ button:focus {
     background: #279e8f;
     border-color: #279e8f;
     box-shadow: 0 0 15px #32BCAD;
+}
+
+/* Novo estilo para a área de PIX Copia e Cola */
+.pix-copy-paste {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.pix-copy-paste h4 {
+    color: var(--primary-color);
+    font-family: 'Bangers', cursive;
+    margin-bottom: 10px;
+}
+
+#pix-key {
+    background: var(--secondary-color);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    word-break: break-all;
+    margin: 10px 0;
+    border: 1px solid var(--primary-color);
+}
+
+.copy-btn {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.copy-btn:hover {
+    background: #e6c200;
 }
 
 .full-width {
