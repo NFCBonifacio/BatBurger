@@ -149,19 +149,38 @@
                     <input type="text" id="troco" placeholder="Informe o valor que você vai pagar" inputmode="numeric">
                 </div>
 
-                <div id="pix-area" style="display: none;">
-                    <div class="pix-info">
-                        <h3>🦇 PAGAMENTO VIA PIX</h3>
-                        <p>Chave PIX: <strong>morcegoburgers@gmail.com</strong></p>
-                        <div class="pix-qrcode-container">
-                            <div id="pix-qrcode" role="img" aria-label="QR Code para pagamento via PIX"></div>
-                            <p>Valor total: <span id="pix-total">R$ 0,00</span></p>
-                        </div>
-                        <p class="pix-instructions">Escaneie o QR Code ou copie a chave PIX para pagamento</p>
-                        <p class="pix-instructions"><strong>Envie o comprovante para este WhatsApp após o pagamento</strong></p>
-                    </div>
-                </div>
+               <div id="pix-area" style="display: none;">
+    <div class="pix-info">
+        <h3>🦇 PAGAMENTO VIA PIX</h3>
+        
+        <div class="pix-key-copy">
+            <p>Chave PIX (e-mail):</p>
+            <div class="copy-field">
+                <input type="text" id="pix-key" value="morcegoburgers@gmail.com" readonly>
+                <button onclick="copyPixKey()" aria-label="Copiar chave PIX">
+                    <i class="fas fa-copy"></i> Copiar
+                </button>
             </div>
+        </div>
+        
+        <div class="pix-qrcode-container">
+            <div id="pix-qrcode" role="img" aria-label="QR Code para pagamento via PIX"></div>
+            <p>Valor total: <span id="pix-total">R$ 0,00</span></p>
+        </div>
+        
+        <div class="pix-instructions">
+            <p><strong>Como pagar:</strong></p>
+            <ol>
+                <li>Abra seu app bancário</li>
+                <li>Toque em "Pagar com PIX"</li>
+                <li>Escolha "Copiar e colar chave"</li>
+                <li>Cole a chave PIX copiada acima</li>
+                <li>Confirme o valor e finalize</li>
+            </ol>
+            <p><strong>Envie o comprovante para este WhatsApp após o pagamento</strong></p>
+        </div>
+    </div>
+</div>
 
             <div class="form-group full-width">
                 <label for="observacoes">Observações:</label>
