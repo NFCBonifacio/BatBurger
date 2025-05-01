@@ -13,6 +13,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const pixArea = document.getElementById('pix-area');
     const backToTopButton = document.getElementById('back-to-top');
     const whatsappNumber = '5533998351903';
+
+    // Funções para PIX no padrão BR
+function generatePixCode(total) {
+    const pixData = {
+        key: 'morcegoburgers@gmail.com',
+        receiverName: 'BRUNA LUISA DE OLIVEIRA QUARESMA',
+        receiverCity: 'NANUQUE MG',
+        description: 'Pagamento BatBurger',
+        amount: total.toFixed(2)
+    };
+
+    const payload = [
+        '000201',
+        '26' + '0014BR.GOV.BCB.PIX' + '01' + pixData.key.length.toString().padStart(2, '0') + pixData.key,
+        '52040000',
+        '5303986',
+        '54' + pixData.amount.length.toString().padStart(2, '0') + pixData.amount,
+        '5802BR',
+        '59' + pixData.receiverName.length.toString().padStart(2, '0') + pixData.receiverName,
+        '60' + pixData.receiverCity.length.toString().padStart(2, '0') + pixData.receiverCity,
+        '62' + '05' + (pixData.description.length + 4).toString().padStart(2, '0') + pixData.description,
+        '6304'
+    ].join('');
+
+    const crc = calculateCRC16(payload);
+    return payload + crc;
+}
+
+function calculateCRC16(payload) {
+    let crc = 0xFFFF;
+    for (let i = 0; i < payload.length; i++) {
+        crc ^= payload.charCodeAt(i) << 8;
+        for (let j = 0; j < 8; j++) {
+            crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+        }
+    }
+    return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+}
+
+function copyPixCode() {
+    const pixCode = document.getElementById('pix-code');
+    pixCode.select();
+    document.execCommand('copy');
+    
+    const copyBtn = document.querySelector('#pix-copy-area button');
+    copyBtn.textContent = 'Copiado!';
+    copyBtn.style.background = '#4CAF50';
+    
+    setTimeout(() => {
+        copyBtn.textContent = 'Copiar';
+        copyBtn.style.background = 'var(--primary-color)';
+    }, 2000);
+    
+    showNotification('Código PIX copiado! Cole no seu app bancário.', 'success');
+}
     
     // Verificar horário de funcionamento (21h às 3h)
     const now = new Date();
@@ -201,20 +256,32 @@ function updateOrderCount() {
 // Função para atualizar o QR Code do PIX
 function updatePixQRCode() {
     const cart = getCart();
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const deliveryFee = calculateDeliveryFee();
-    const total = subtotal + deliveryFee;
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const pixQrCode = document.getElementById('pix-qrcode');
+    const pixCodeElement = document.getElementById('pix-code');
+    const pixTotalElement = document.getElementById('pix-total');
     
-    // Limpar QR Code anterior
     pixQrCode.innerHTML = '';
+    pixCodeElement.value = '';
     
     if (total > 0) {
-        const pixInfo = {
-            chave: 'morcegoburgers@gmail.com',
-            valor: total.toFixed(2),
-            descricao: 'BatBurger - Pedido de Lanches'
-        };
+        const pixCode = generatePixCode(total);
+        pixTotalElement.textContent = `R$ ${total.toFixed(2)}`;
+        
+        // Atualiza QR Code
+        new QRCode(pixQrCode, {
+            text: pixCode,
+            width: 150,
+            height: 150,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        
+        // Atualiza código copiável
+        pixCodeElement.value = pixCode;
+    }
+}
         
         // Gerar QR Code (usando a biblioteca QRCode.js)
         new QRCode(pixQrCode, {
