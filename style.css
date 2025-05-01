@@ -1,14 +1,32 @@
 /* style.css */
-/* Estilo Gotham City */
+/* Estilo Gotham City - Versão Melhorada */
+:root {
+    --primary-color: #ffd700;
+    --secondary-color: #1a1a1a;
+    --accent-color: #ff5555;
+    --text-color: #e0e0e0;
+    --bg-color: #0a0a0a;
+    --card-bg: rgba(30, 30, 30, 0.9);
+    --header-bg: rgba(20, 20, 20, 0.8);
+    --overlay: rgba(0, 0, 0, 0.7);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #0a0a0a;
-    color: #e0e0e0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     background-image: url('https://github.com/NFCBonifacio/BatBurger/blob/main/fundo2.jpg?raw=true');
     background-size: cover;
     background-attachment: fixed;
+    line-height: 1.6;
 }
 
 body::before {
@@ -18,7 +36,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--overlay);
     z-index: -1;
 }
 
@@ -26,8 +44,8 @@ body::before {
     position: absolute;
     top: -40px;
     left: 0;
-    background: #ffd700;
-    color: #1a1a1a;
+    background: var(--primary-color);
+    color: var(--secondary-color);
     padding: 8px;
     z-index: 100;
     transition: top 0.3s;
@@ -40,14 +58,14 @@ body::before {
 header {
     text-align: center;
     padding: 20px;
-    background: rgba(20, 20, 20, 0.8);
-    border-bottom: 3px solid #ffd700;
+    background: var(--header-bg);
+    border-bottom: 3px solid var(--primary-color);
 }
 
 header h1 {
     font-family: 'Bangers', cursive;
-    font-size: 3em;
-    color: #ffd700;
+    font-size: clamp(2em, 5vw, 3em);
+    color: var(--primary-color);
     margin: 10px 0;
     letter-spacing: 2px;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
@@ -60,12 +78,14 @@ header h1 span {
 header p {
     font-size: 1.2em;
     margin: 5px 0;
-    color: #e0e0e0;
+    color: var(--text-color);
 }
 
 .bat-logo img {
-    filter: drop-shadow(0 0 5px #ffd700);
+    filter: drop-shadow(0 0 5px var(--primary-color));
     transition: transform 0.3s;
+    max-width: 100%;
+    height: auto;
 }
 
 .bat-logo:hover img {
@@ -75,7 +95,7 @@ header p {
 .order-counter {
     margin-top: 10px;
     font-size: 1.1em;
-    color: #ffd700;
+    color: var(--primary-color);
 }
 
 .order-counter span {
@@ -99,8 +119,8 @@ header p {
 
 .section-title h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
-    font-size: 2em;
+    color: var(--primary-color);
+    font-size: clamp(1.5em, 4vw, 2em);
     letter-spacing: 2px;
     margin-bottom: 15px;
 }
@@ -114,10 +134,10 @@ header p {
 }
 
 .item {
-    background: rgba(30, 30, 30, 0.9);
+    background: var(--card-bg);
     border-radius: 10px;
     padding: 15px;
-    width: 280px;
+    width: min(100%, 280px);
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
     border: 1px solid #333;
     transition: all 0.3s;
@@ -133,7 +153,7 @@ header p {
 .item:hover {
     transform: translateY(-10px);
     box-shadow: 0 10px 25px rgba(255, 215, 0, 0.5);
-    border-color: #ffd700;
+    border-color: var(--primary-color);
 }
 
 .item-img {
@@ -144,7 +164,7 @@ header p {
     background-repeat: no-repeat;
     border-radius: 8px;
     margin-bottom: 15px;
-    border: 2px solid #ffd700;
+    border: 2px solid var(--primary-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s;
 }
@@ -154,7 +174,7 @@ header p {
 }
 
 .item h3 {
-    color: #ffd700;
+    color: var(--primary-color);
     font-size: 1.5em;
     margin: 10px 0;
     font-family: 'Bangers', cursive;
@@ -170,15 +190,15 @@ header p {
 .price {
     font-weight: bold;
     font-size: 1.3em;
-    color: #ff5555;
+    color: var(--accent-color);
     margin: 10px 0;
     display: block;
 }
 
 button {
-    background: #1a1a1a;
-    color: #ffd700;
-    border: 2px solid #ffd700;
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -186,28 +206,33 @@ button {
     transition: all 0.3s;
     width: 100%;
     margin-top: 10px;
+    font-size: 1em;
 }
 
 button:hover {
-    background: #ffd700;
-    color: #1a1a1a;
-    box-shadow: 0 0 15px #ffd700;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 .cart {
-    background: rgba(30, 30, 30, 0.95);
+    background: var(--card-bg);
     margin: 30px auto;
     padding: 25px;
-    width: 90%;
-    max-width: 500px;
+    width: min(90%, 500px);
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    border: 2px solid #ffd700;
+    border: 2px solid var(--primary-color);
 }
 
 .cart h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
+    color: var(--primary-color);
     text-align: center;
     font-size: 1.8em;
     margin-bottom: 20px;
@@ -218,8 +243,8 @@ button:hover {
 }
 
 #cart-count {
-    background: #ffd700;
-    color: #1a1a1a;
+    background: var(--primary-color);
+    color: var(--secondary-color);
     padding: 2px 8px;
     border-radius: 50%;
     font-size: 0.8em;
@@ -235,7 +260,7 @@ button:hover {
 .cart-empty i {
     font-size: 3em;
     margin-bottom: 10px;
-    color: #ffd700;
+    color: var(--primary-color);
 }
 
 #cart-items {
@@ -243,6 +268,21 @@ button:hover {
     padding: 0;
     max-height: 300px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+
+#cart-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+#cart-items::-webkit-scrollbar-track {
+    background: var(--secondary-color);
+}
+
+#cart-items::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 6px;
 }
 
 #cart-items li {
@@ -263,32 +303,31 @@ button:hover {
 
 .cart-total {
     margin-top: 20px;
-    border-top: 1px solid #ffd700;
+    border-top: 1px solid var(--primary-color);
     padding-top: 15px;
 }
 
 #total {
     font-weight: bold;
     font-size: 1.4em;
-    color: #ffd700;
+    color: var(--primary-color);
     text-align: right;
     margin: 20px 0;
 }
 
 .customer-info {
-    background: rgba(30, 30, 30, 0.9);
+    background: var(--card-bg);
     margin: 20px auto;
     padding: 25px;
-    width: 90%;
-    max-width: 800px;
+    width: min(90%, 800px);
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    border: 2px solid #ffd700;
+    border: 2px solid var(--primary-color);
 }
 
 .customer-info h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
+    color: var(--primary-color);
     text-align: center;
     font-size: 1.8em;
     margin-bottom: 20px;
@@ -310,7 +349,7 @@ button:hover {
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: #ffd700;
+    color: var(--primary-color);
     font-weight: bold;
 }
 
@@ -319,15 +358,20 @@ button:hover {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #333;
-    background: #1a1a1a;
+    background: var(--secondary-color);
     color: white;
     transition: all 0.3s;
+    font-size: 1em;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #ffd700;
-    box-shadow: 0 0 5px #ffd700;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-color);
+}
+
+.form-group input:invalid {
+    border-color: #ff4444;
 }
 
 .payment-method {
@@ -340,7 +384,7 @@ button:hover {
 
 .payment-method h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
+    color: var(--primary-color);
     text-align: center;
     font-size: 1.5em;
     margin-bottom: 15px;
@@ -364,7 +408,7 @@ button:hover {
     appearance: none;
     width: 18px;
     height: 18px;
-    border: 2px solid #ffd700;
+    border: 2px solid var(--primary-color);
     border-radius: 50%;
     outline: none;
     cursor: pointer;
@@ -376,7 +420,7 @@ button:hover {
     position: absolute;
     width: 10px;
     height: 10px;
-    background: #ffd700;
+    background: var(--primary-color);
     border-radius: 50%;
     top: 50%;
     left: 50%;
@@ -385,7 +429,7 @@ button:hover {
 
 .payment-option label {
     cursor: pointer;
-    color: #e0e0e0;
+    color: var(--text-color);
 }
 
 #pix-area {
@@ -397,7 +441,7 @@ button:hover {
 }
 
 .pix-info h3 {
-    color: #ffd700;
+    color: var(--primary-color);
     font-family: 'Bangers', cursive;
     margin-bottom: 10px;
 }
@@ -420,7 +464,7 @@ button:hover {
 
 #pix-total {
     font-weight: bold;
-    color: #ff5555;
+    color: var(--accent-color);
 }
 
 .pix-instructions {
@@ -451,9 +495,9 @@ button:hover {
 
 .upload-btn {
     display: inline-block;
-    background: #1a1a1a;
-    color: #ffd700;
-    border: 2px solid #ffd700;
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -463,9 +507,9 @@ button:hover {
 }
 
 .upload-btn:hover {
-    background: #ffd700;
-    color: #1a1a1a;
-    box-shadow: 0 0 10px #ffd700;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    box-shadow: 0 0 10px var(--primary-color);
 }
 
 .full-width {
@@ -478,16 +522,17 @@ textarea {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #333;
-    background: #1a1a1a;
+    background: var(--secondary-color);
     color: white;
     resize: vertical;
     transition: all 0.3s;
+    font-family: 'Roboto', sans-serif;
 }
 
 textarea:focus {
     outline: none;
-    border-color: #ffd700;
-    box-shadow: 0 0 5px #ffd700;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-color);
 }
 
 .checkout-btn {
@@ -530,19 +575,18 @@ textarea:focus {
 }
 
 .reviews {
-    background: rgba(30, 30, 30, 0.9);
+    background: var(--card-bg);
     margin: 30px auto;
     padding: 25px;
-    width: 90%;
-    max-width: 1200px;
+    width: min(90%, 1200px);
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    border: 2px solid #ffd700;
+    border: 2px solid var(--primary-color);
 }
 
 .reviews h2 {
     font-family: 'Bangers', cursive;
-    color: #ffd700;
+    color: var(--primary-color);
     text-align: center;
     font-size: 1.8em;
     margin-bottom: 20px;
@@ -559,7 +603,7 @@ textarea:focus {
     background: rgba(40, 40, 40, 0.8);
     border-radius: 8px;
     padding: 15px;
-    width: 300px;
+    width: min(100%, 300px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -575,18 +619,18 @@ textarea:focus {
     border-radius: 50%;
     object-fit: cover;
     margin-right: 10px;
-    border: 2px solid #ffd700;
+    border: 2px solid var(--primary-color);
 }
 
 .review-header h3 {
     margin: 0;
-    color: #ffd700;
+    color: var(--primary-color);
     font-family: 'Bangers', cursive;
     font-size: 1.2em;
 }
 
 .stars {
-    color: #ffd700;
+    color: var(--primary-color);
     margin-left: auto;
 }
 
@@ -596,6 +640,27 @@ textarea:focus {
     color: #ccc;
 }
 
+.about-section {
+    background: var(--card-bg);
+    margin: 30px auto;
+    padding: 25px;
+    width: min(90%, 800px);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    border: 2px solid var(--primary-color);
+    text-align: center;
+}
+
+.about-section h2 {
+    font-family: 'Bangers', cursive;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.about-section p {
+    margin-bottom: 10px;
+}
+
 #back-to-top {
     position: fixed;
     bottom: 20px;
@@ -603,8 +668,8 @@ textarea:focus {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #ffd700;
-    color: #1a1a1a;
+    background: var(--primary-color);
+    color: var(--secondary-color);
     border: none;
     cursor: pointer;
     display: none;
@@ -616,8 +681,8 @@ textarea:focus {
 }
 
 #back-to-top:hover {
-    background: #1a1a1a;
-    color: #ffd700;
+    background: var(--secondary-color);
+    color: var(--primary-color);
     transform: scale(1.1);
 }
 
@@ -665,10 +730,6 @@ textarea:focus {
 }
 
 @media (max-width: 768px) {
-    header h1 {
-        font-size: 2.5em;
-    }
-    
     .item {
         width: 100%;
         max-width: 350px;
@@ -685,10 +746,6 @@ textarea:focus {
 }
 
 @media (max-width: 480px) {
-    header h1 {
-        font-size: 2em;
-    }
-    
     .remove-btn {
         width: 30px;
         height: 30px;
