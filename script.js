@@ -1,4 +1,4 @@
-// script.js
+// script.js - Versão Melhorada
 document.addEventListener('DOMContentLoaded', function() {
     // Variáveis globais
     let cart = [];
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dinheiroOption.disabled = true;
         dinheiroOption.nextElementSibling.style.opacity = '0.5';
         dinheiroOption.nextElementSibling.style.cursor = 'not-allowed';
+        dinheiroOption.nextElementSibling.setAttribute('aria-disabled', 'true');
     }
     
     // Inicializar contador de pedidos com um valor aleatório para simular atividade
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.value === 'dinheiro') {
                 trocoField.style.display = 'block';
                 pixArea.style.display = 'none';
+                document.getElementById('troco').focus();
             } else if (this.value === 'pix') {
                 trocoField.style.display = 'none';
                 pixArea.style.display = 'block';
@@ -56,6 +58,15 @@ document.addEventListener('DOMContentLoaded', function() {
     receiptUpload.addEventListener('change', function(e) {
         if (e.target.files.length > 0) {
             receiptFile = e.target.files[0];
+            if (receiptFile.size > 5 * 1024 * 1024) { // 5MB max
+                showNotification('Arquivo muito grande. Máximo de 5MB permitido.', 'error');
+                receiptFile = null;
+                e.target.value = '';
+                fileName.style.display = 'none';
+                sendReceiptBtn.style.display = 'none';
+                return;
+            }
+            
             fileName.textContent = `Arquivo selecionado: ${receiptFile.name}`;
             fileName.style.display = 'block';
             sendReceiptBtn.style.display = 'block';
@@ -63,6 +74,16 @@ document.addEventListener('DOMContentLoaded', function() {
             receiptFile = null;
             fileName.style.display = 'none';
             sendReceiptBtn.style.display = 'none';
+        }
+    });
+    
+    // Enviar comprovante (simulação)
+    sendReceiptBtn.addEventListener('click', function() {
+        if (receiptFile) {
+            showNotification('Comprovante enviado com sucesso!', 'success');
+            // Na prática, você precisaria enviar para um servidor
+        } else {
+            showNotification('Nenhum arquivo selecionado!', 'error');
         }
     });
     
@@ -81,9 +102,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Animação dos itens do cardápio
     const menuItems = document.querySelectorAll('.item');
-    menuItems.forEach(item => {
-        const order = item.style.getPropertyValue('--order');
-        item.style.animationDelay = `${order * 0.1}s`;
+    menuItems.forEach((item, index) => {
+        item.style.setProperty('--order', index);
+        item.style.animationDelay = `${index * 0.1}s`;
+    });
+    
+    // Validação do formulário
+    const form = document.querySelector('.customer-info');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        sendOrder();
     });
     
     // Inicializar o carrinho
@@ -109,6 +137,9 @@ function addToCart(itemName, itemPrice) {
     updateCartDisplay();
     updateOrderCount();
     showNotification(`${itemName} adicionado ao carrinho!`, 'success');
+    
+    // Rolagem suave para o carrinho
+    document.querySelector('.cart').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // Função para remover item do carrinho
@@ -154,7 +185,7 @@ function updateCartDisplay() {
             li.innerHTML = `
                 <span>${item.name} x${item.quantity}</span>
                 <span>R$ ${itemTotal.toFixed(2)}</span>
-                <button class="remove-btn" onclick="removeFromCart('${item.name}')" aria-label="Remover ${item.name} do carrinho">
+                <button class="remove-btn" onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')" aria-label="Remover ${item.name} do carrinho">
                     <i class="fas fa-times"></i>
                 </button>
             `;
@@ -210,7 +241,7 @@ function updatePixQRCode() {
         
         // Gerar QR Code (usando a biblioteca QRCode.js)
         new QRCode(pixQrCode, {
-            text: `PIX:${pixInfo.chave}?amount=${pixInfo.valor}&message=${pixInfo.descricao}`,
+            text: `PIX:${pixInfo.chave}?amount=${pixInfo.valor}&message=${encodeURIComponent(pixInfo.descricao)}`,
             width: 150,
             height: 150,
             colorDark: "#000000",
@@ -223,14 +254,19 @@ function updatePixQRCode() {
 // Função para enviar o pedido via WhatsApp
 function sendOrder() {
     const cart = getCart();
-    const nome = document.getElementById('nome').value;
-    const endereco = document.getElementById('endereco').value;
-    const telefone = document.getElementById('telefone').value;
-    const observacoes = document.getElementById('observacoes').value;
-    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-    const troco = paymentMethod === 'dinheiro' ? document.getElementById('troco').value : '';
+    const nome = document.getElementById('nome').value.trim();
+    const endereco = document.getElementById('endereco').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+    const observacoes = document.getElementById('observacoes').value.trim();
+    const paymentMethod = document.querySelector('input[name="payment"]:checked');
+    const troco = paymentMethod.value === 'dinheiro' ? document.getElementById('troco').value.trim() : '';
     const receiptFile = document.getElementById('receipt-upload').files[0];
     const whatsappNumber = '5533998351903';
+    
+    if (!paymentMethod) {
+        showNotification('Por favor, selecione uma forma de pagamento!', 'error');
+        return;
+    }
     
     if (cart.length === 0) {
         showNotification('Seu carrinho está vazio! Adicione itens antes de finalizar.', 'error');
@@ -239,6 +275,20 @@ function sendOrder() {
     
     if (!nome || !endereco || !telefone) {
         showNotification('Por favor, preencha todos os campos obrigatórios!', 'error');
+        
+        // Destacar campos faltantes
+        if (!nome) document.getElementById('nome').focus();
+        else if (!endereco) document.getElementById('endereco').focus();
+        else if (!telefone) document.getElementById('telefone').focus();
+        
+        return;
+    }
+    
+    // Validar telefone (formato simples)
+    const phoneRegex = /^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/;
+    if (!phoneRegex.test(telefone)) {
+        showNotification('Por favor, insira um número de telefone válido!', 'error');
+        document.getElementById('telefone').focus();
         return;
     }
     
@@ -257,13 +307,13 @@ function sendOrder() {
     });
     
     message += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
-    message += `*FORMA DE PAGAMENTO:* ${getPaymentMethodName(paymentMethod)}\n`;
+    message += `*FORMA DE PAGAMENTO:* ${getPaymentMethodName(paymentMethod.value)}\n`;
     
-    if (paymentMethod === 'dinheiro' && troco) {
+    if (paymentMethod.value === 'dinheiro' && troco) {
         message += `*Troco para:* R$ ${troco}\n`;
     }
     
-    if (paymentMethod === 'pix') {
+    if (paymentMethod.value === 'pix') {
         message += `*Chave PIX:* lmorcegoburgers@gmail.com\n`;
         message += `*Valor PIX:* R$ ${total.toFixed(2)}\n`;
         
@@ -287,9 +337,7 @@ function sendOrder() {
     let whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
     
     // Se houver comprovante e for PIX, tentar enviar via API (simulação)
-    if (paymentMethod === 'pix' && receiptFile) {
-        // Na prática, você precisaria de um backend para receber o arquivo
-        // Aqui vamos apenas adicionar uma mensagem sobre o comprovante
+    if (paymentMethod.value === 'pix' && receiptFile) {
         showNotification('Comprovante anexado! Enviando pedido...', 'success');
     }
     
@@ -310,6 +358,9 @@ function sendOrder() {
     
     // Mostrar notificação de sucesso
     showNotification('Pedido enviado com sucesso!', 'success');
+    
+    // Atualizar contador de pedidos
+    updateOrderCount();
 }
 
 // Função auxiliar para obter o nome do método de pagamento
@@ -326,6 +377,8 @@ function getPaymentMethodName(method) {
 function showNotification(message, type) {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
+    notification.setAttribute('role', 'alert');
+    notification.setAttribute('aria-live', 'assertive');
     notification.textContent = message;
     document.body.appendChild(notification);
     
