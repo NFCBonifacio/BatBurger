@@ -268,7 +268,7 @@ function sendOrder() {
     }
     
     if (paymentMethod.value === 'pix') {
-        message += `*Chave PIX:* lmorcegoburgers@gmail.com\n`;
+        message += `*Chave PIX:* morcegoburgers@gmail.com\n`;
         message += `*Valor PIX:* R$ ${total.toFixed(2)}\n`;
         message += `\n*ENVIE O COMPROVANTE PARA ESTE NÚMERO APÓS O PAGAMENTO*\n`;
     }
