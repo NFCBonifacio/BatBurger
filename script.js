@@ -1,4 +1,3 @@
-// script.js - Versão Simplificada
 document.addEventListener('DOMContentLoaded', function() {
     // Variáveis globais
     let cart = [];
@@ -8,37 +7,51 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartCount = document.getElementById('cart-count');
     const orderCountElement = document.getElementById('order-count');
     const totalElement = document.getElementById('total');
-    const pixTotalElement = document.getElementById('pix-total');
+    const deliveryFeeElement = document.getElementById('delivery-fee');
+    const totalWithDeliveryElement = document.getElementById('total-with-delivery');
     const paymentOptions = document.getElementsByName('payment');
     const trocoField = document.getElementById('troco-field');
     const pixArea = document.getElementById('pix-area');
+    const paymentWarning = document.getElementById('payment-warning');
     const backToTopButton = document.getElementById('back-to-top');
-    const whatsappNumber = '5533998351903'; // Seu número de WhatsApp
+    const whatsappNumber = '5533998351903';
     
-    // Verificar horário de funcionamento (21h às 3h)
+    // Verificar horário de funcionamento e definir taxa de entrega
     const now = new Date();
     const currentHour = now.getHours();
+    const isAfterMidnight = currentHour >= 0 && currentHour < 3;
+    const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
     
     if (currentHour < 21 && currentHour > 3) {
         showNotification('Estamos fechados no momento. Funcionamos das 21h às 3h.', 'warning');
     }
-
-    // Inicializar contador de pedidos zerado
-    orderCount = 0;
-    updateOrderCount();
     
+    // Atualizar taxa de entrega
+    deliveryFeeElement.textContent = `Taxa de entrega: R$ ${deliveryFee.toFixed(2)}`;
+    updateTotalWithDelivery();
+    
+    // Mostrar aviso se for após meia-noite
+    if (isAfterMidnight) {
+        paymentWarning.style.display = 'block';
+    }
+
     // Configurar listeners para os métodos de pagamento
     paymentOptions.forEach(option => {
         option.addEventListener('change', function() {
             if (this.value === 'dinheiro') {
+                if (isAfterMidnight) {
+                    showNotification('Não aceitamos dinheiro após meia-noite. Por favor, escolha outra forma de pagamento.', 'error');
+                    document.getElementById('cartao').checked = true;
+                    trocoField.style.display = 'none';
+                    pixArea.style.display = 'none';
+                    return;
+                }
                 trocoField.style.display = 'block';
                 pixArea.style.display = 'none';
                 document.getElementById('troco').focus();
             } else if (this.value === 'pix') {
                 trocoField.style.display = 'none';
                 pixArea.style.display = 'block';
-                updatePixQRCode();
-                updatePixCopyPaste();
             } else {
                 trocoField.style.display = 'none';
                 pixArea.style.display = 'none';
@@ -77,6 +90,16 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCartDisplay();
 });
 
+// Função para copiar chave PIX
+function copyPixKey() {
+    const pixKey = document.getElementById('pix-key').textContent;
+    navigator.clipboard.writeText(pixKey).then(() => {
+        showNotification('Chave PIX copiada!', 'success');
+    }).catch(err => {
+        console.error('Erro ao copiar chave PIX:', err);
+    });
+}
+
 // Função para adicionar item ao carrinho
 function addToCart(itemName, itemPrice) {
     const cart = getCart();
@@ -114,7 +137,9 @@ function updateCartDisplay() {
     const cartEmpty = document.getElementById('cart-empty');
     const cartCount = document.getElementById('cart-count');
     const totalElement = document.getElementById('total');
-    const pixTotalElement = document.getElementById('pix-total');
+    const deliveryFeeElement = document.getElementById('delivery-fee');
+    const totalWithDeliveryElement = document.getElementById('total-with-delivery');
+    const pixTotalElement = document.querySelector('#pix-total span');
     
     // Limpar o carrinho
     cartItems.innerHTML = '';
@@ -123,6 +148,8 @@ function updateCartDisplay() {
         cartEmpty.style.display = 'block';
         cartCount.textContent = '(0)';
         totalElement.textContent = 'Total: R$ 0,00';
+        deliveryFeeElement.textContent = 'Taxa de entrega: R$ 0,00';
+        totalWithDeliveryElement.textContent = 'Total com entrega: R$ 0,00';
         pixTotalElement.textContent = 'R$ 0,00';
     } else {
         cartEmpty.style.display = 'none';
@@ -152,14 +179,33 @@ function updateCartDisplay() {
         // Atualizar contador e total
         cartCount.textContent = `(${itemCount})`;
         totalElement.textContent = `Total: R$ ${total.toFixed(2)}`;
-        pixTotalElement.textContent = `R$ ${total.toFixed(2)}`;
         
-        // Atualizar PIX se estiver visível
-        if (document.querySelector('input[name="payment"]:checked').value === 'pix') {
-            updatePixQRCode();
-            updatePixCopyPaste();
-        }
+        // Atualizar taxa de entrega
+        const now = new Date();
+        const currentHour = now.getHours();
+        const isAfterMidnight = currentHour >= 0 && currentHour < 3;
+        const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
+        deliveryFeeElement.textContent = `Taxa de entrega: R$ ${deliveryFee.toFixed(2)}`;
+        
+        // Atualizar total com entrega
+        const totalWithDelivery = total + deliveryFee;
+        totalWithDeliveryElement.textContent = `Total com entrega: R$ ${totalWithDelivery.toFixed(2)}`;
+        pixTotalElement.textContent = `R$ ${totalWithDelivery.toFixed(2)}`;
     }
+}
+
+// Função para atualizar o total com entrega
+function updateTotalWithDelivery() {
+    const cart = getCart();
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const now = new Date();
+    const currentHour = now.getHours();
+    const isAfterMidnight = currentHour >= 0 && currentHour < 3;
+    const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
+    const totalWithDelivery = total + deliveryFee;
+    
+    document.getElementById('total-with-delivery').textContent = `Total com entrega: R$ ${totalWithDelivery.toFixed(2)}`;
+    document.querySelector('#pix-total span').textContent = `R$ ${totalWithDelivery.toFixed(2)}`;
 }
 
 // Função para atualizar o contador de pedidos
@@ -185,66 +231,6 @@ function updateOrderCount() {
     }
 }
 
-// Função para atualizar o QR Code do PIX
-function updatePixQRCode() {
-    const cart = getCart();
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const pixQrCode = document.getElementById('pix-qrcode');
-    
-    // Limpar QR Code anterior
-    pixQrCode.innerHTML = '';
-    
-    if (total > 0) {
-        const pixInfo = {
-            chave: 'morcegoburgers@gmail.com',
-            valor: total.toFixed(2),
-            descricao: 'BatBurger - Pedido de Lanches'
-        };
-        
-        // Gerar QR Code (usando a biblioteca QRCode.js)
-        new QRCode(pixQrCode, {
-            text: `00020126580014BR.GOV.BCB.PIX0136morcegoburgers@gmail.com5204000053039865404${total.toFixed(2)}5802BR5925BRUNA LUISA DE OLIVEIRA QUAR6007NANUQUE62070503***6304`,
-            width: 150,
-            height: 150,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    }
-}
-
-// Função para atualizar o PIX Copia e Cola
-function updatePixCopyPaste() {
-    const cart = getCart();
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const pixKeyElement = document.getElementById('pix-key');
-    
-    if (total > 0) {
-        // Formatar o valor para ter sempre 2 casas decimais
-        const valorFormatado = total.toFixed(2);
-        
-        // Criar payload PIX no padrão do Banco Central
-        const pixPayload = `00020126580014BR.GOV.BCB.PIX0136morcegoburgers@gmail.com5204000053039865404${valorFormatado}5802BR5925BRUNA LUISA DE OLIVEIRA QUAR6007NANUQUE62070503***6304`;
-        
-        pixKeyElement.textContent = pixPayload;
-    } else {
-        pixKeyElement.textContent = '00020126580014BR.GOV.BCB.PIX0136morcegoburgers@gmail.com52040000530398654040.005802BR5925BRUNA LUISA DE OLIVEIRA QUAR6007NANUQUE62070503***6304';
-    }
-}
-
-// Função para copiar o código PIX
-function copyPixKey() {
-    const pixKeyElement = document.getElementById('pix-key');
-    const range = document.createRange();
-    range.selectNode(pixKeyElement);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand('copy');
-    window.getSelection().removeAllRanges();
-    
-    showNotification('Código PIX copiado! Cole no seu aplicativo do banco.', 'success');
-}
-
 // Função para enviar o pedido via WhatsApp
 function sendOrder() {
     const cart = getCart();
@@ -258,6 +244,17 @@ function sendOrder() {
     
     if (!paymentMethod) {
         showNotification('Por favor, selecione uma forma de pagamento!', 'error');
+        return;
+    }
+    
+    // Verificar se é após meia-noite e tentativa de pagamento em dinheiro
+    const now = new Date();
+    const currentHour = now.getHours();
+    const isAfterMidnight = currentHour >= 0 && currentHour < 3;
+    
+    if (isAfterMidnight && paymentMethod.value === 'dinheiro') {
+        showNotification('Não aceitamos dinheiro após meia-noite. Por favor, escolha outra forma de pagamento.', 'error');
+        document.getElementById('cartao').checked = true;
         return;
     }
     
@@ -287,6 +284,8 @@ function sendOrder() {
     
     // Calcular total
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
+    const totalWithDelivery = total + deliveryFee;
     
     // Montar mensagem
     let message = `🦇 *NOVO PEDIDO BATBURGER* 🦇\n\n`;
@@ -299,7 +298,9 @@ function sendOrder() {
         message += `- ${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
     });
     
-    message += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
+    message += `\n*Subtotal: R$ ${total.toFixed(2)}*\n`;
+    message += `*Taxa de entrega: R$ ${deliveryFee.toFixed(2)} ${isAfterMidnight ? '(taxa noturna)' : ''}*\n`;
+    message += `*Total: R$ ${totalWithDelivery.toFixed(2)}*\n\n`;
     message += `*FORMA DE PAGAMENTO:* ${getPaymentMethodName(paymentMethod.value)}\n`;
     
     if (paymentMethod.value === 'dinheiro' && troco) {
@@ -308,7 +309,7 @@ function sendOrder() {
     
     if (paymentMethod.value === 'pix') {
         message += `*Chave PIX:* morcegoburgers@gmail.com\n`;
-        message += `*Valor PIX:* R$ ${total.toFixed(2)}\n`;
+        message += `*Valor PIX:* R$ ${totalWithDelivery.toFixed(2)}\n`;
         message += `\n*ENVIE O COMPROVANTE PARA ESTE NÚMERO APÓS O PAGAMENTO*\n`;
     }
     
