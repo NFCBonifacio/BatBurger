@@ -307,12 +307,18 @@ button:focus {
     padding-top: 15px;
 }
 
-#total {
+#total, #delivery-fee, #total-with-delivery {
     font-weight: bold;
-    font-size: 1.4em;
-    color: var(--primary-color);
+    font-size: 1.2em;
+    color: var(--text-color);
     text-align: right;
-    margin: 20px 0;
+    margin: 5px 0;
+}
+
+#total-with-delivery {
+    color: var(--primary-color);
+    font-size: 1.4em;
+    margin-top: 10px;
 }
 
 .customer-info {
@@ -390,6 +396,26 @@ button:focus {
     margin-bottom: 15px;
 }
 
+.payment-warning {
+    background: rgba(255, 87, 34, 0.2);
+    border-left: 4px solid #ff5722;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.payment-warning i {
+    color: #ff5722;
+}
+
+.payment-warning p {
+    margin: 0;
+    color: #ff8a65;
+}
+
 .payment-options {
     display: flex;
     justify-content: center;
@@ -447,24 +473,34 @@ button:focus {
 }
 
 .pix-info p {
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
-.pix-qrcode-container {
-    margin: 15px auto;
-    padding: 10px;
-    background: white;
-    border-radius: 8px;
-    display: inline-block;
+.copy-pix-btn {
+    background: #32BCAD;
+    color: white;
+    border: 2px solid #32BCAD;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin: 10px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
-#pix-qrcode {
-    margin: 0 auto;
+.copy-pix-btn:hover {
+    background: #279e8f;
+    border-color: #279e8f;
+    box-shadow: 0 0 15px #32BCAD;
 }
 
 #pix-total {
     font-weight: bold;
     color: var(--accent-color);
+    margin: 10px 0;
 }
 
 .pix-instructions {
@@ -475,60 +511,6 @@ button:focus {
 
 .pix-instructions strong {
     color: var(--primary-color);
-}
-
-.pix-payment-btn {
-    background: #32BCAD;
-    color: white;
-    border: 2px solid #32BCAD;
-    margin-top: 10px;
-}
-
-.pix-payment-btn:hover {
-    background: #279e8f;
-    border-color: #279e8f;
-    box-shadow: 0 0 15px #32BCAD;
-}
-
-/* Novo estilo para a área de PIX Copia e Cola */
-.pix-copy-paste {
-    margin-top: 15px;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    text-align: center;
-}
-
-.pix-copy-paste h4 {
-    color: var(--primary-color);
-    font-family: 'Bangers', cursive;
-    margin-bottom: 10px;
-}
-
-#pix-key {
-    background: var(--secondary-color);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    word-break: break-all;
-    margin: 10px 0;
-    border: 1px solid var(--primary-color);
-}
-
-.copy-btn {
-    background: var(--primary-color);
-    color: var(--secondary-color);
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s;
-    margin-top: 10px;
-}
-
-.copy-btn:hover {
-    background: #e6c200;
 }
 
 .full-width {
