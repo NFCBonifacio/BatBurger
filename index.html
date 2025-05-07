@@ -107,6 +107,8 @@
             <ul id="cart-items"></ul>
             <div class="cart-total">
                 <p id="total">Total: R$ 0,00</p>
+                <p id="delivery-fee">Taxa de entrega: R$ 4,00</p>
+                <p id="total-with-delivery">Total com entrega: R$ 4,00</p>
             </div>
         </div>
 
@@ -129,6 +131,9 @@
 
             <div class="payment-method">
                 <h2>💳 FORMA DE PAGAMENTO</h2>
+                <div id="payment-warning" class="payment-warning" style="display: none;">
+                    <p><i class="fas fa-exclamation-triangle"></i> Após meia-noite, não aceitamos pagamento em dinheiro.</p>
+                </div>
                 <div class="payment-options">
                     <div class="payment-option">
                         <input type="radio" id="cartao" name="payment" value="cartao" checked aria-checked="true">
@@ -152,23 +157,11 @@
                 <div id="pix-area" style="display: none;">
                     <div class="pix-info">
                         <h3>🦇 PAGAMENTO VIA PIX</h3>
-                        <p>Chave PIX: <strong>morcegoburgers@gmail.com</strong></p>
-                        <div class="pix-qrcode-container">
-                            <div id="pix-qrcode" role="img" aria-label="QR Code para pagamento via PIX"></div>
-                            <p>Valor total: <span id="pix-total">R$ 0,00</span></p>
-                        </div>
-                        <p class="pix-instructions">Escaneie o QR Code ou copie a chave PIX para pagamento</p>
-                        
-                        <!-- Nova área de PIX Copia e Cola -->
-                        <div class="pix-copy-paste">
-                            <h4>🦇 PIX COPIA E COLA</h4>
-                            <div id="pix-key">00020126580014BR.GOV.BCB.PIX0136morcegoburgers@gmail.com5204000053039865404${total}5802BR5925BRUNA LUISA DE OLIVEIRA QUAR6007NANUQUE62070503***6304</div>
-                            <button class="copy-btn" onclick="copyPixKey()">
-                                <i class="fas fa-copy"></i> COPIAR CÓDIGO
-                            </button>
-                            <p class="pix-instructions">Cole este código no seu aplicativo do banco para pagar via PIX</p>
-                        </div>
-                        
+                        <p>Chave PIX: <strong id="pix-key">morcegoburgers@gmail.com</strong></p>
+                        <button onclick="copyPixKey()" class="copy-pix-btn">
+                            <i class="far fa-copy"></i> Copiar Chave PIX
+                        </button>
+                        <p id="pix-total">Valor total: <span>R$ 0,00</span></p>
                         <p class="pix-instructions"><strong>Envie o comprovante para este WhatsApp após o pagamento</strong></p>
                     </div>
                 </div>
@@ -219,6 +212,7 @@
             <p>O BatBurger surgiu para trazer os melhores hambúrgueres artesanais da região. Nosso compromisso é com qualidade e sabor.</p>
             <p>🕒 Funcionamento: Todos os dias, das 21h às 3h</p>
             <p>📍 Entregamos em toda região</p>
+            <p>💰 Taxa de entrega: R$ 4,00 (até meia-noite) | R$ 8,00 (após meia-noite)</p>
         </div>
     </main>
 
@@ -226,7 +220,6 @@
         <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
 
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
