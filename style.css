@@ -23,7 +23,7 @@ body {
     padding: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
-    background-image: url('https://github.com/NFCBonifacio/BatBurger/blob/main/fundo2.jpg?raw=true');
+    background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/fundo2.webp?raw=true');
     background-size: cover;
     background-attachment: fixed;
     line-height: 1.6;
