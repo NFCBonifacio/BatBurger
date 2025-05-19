@@ -240,7 +240,7 @@ function sendOrder() {
     const observacoes = document.getElementById('observacoes').value.trim();
     const paymentMethod = document.querySelector('input[name="payment"]:checked');
     const troco = paymentMethod.value === 'dinheiro' ? document.getElementById('troco').value.trim() : '';
-    const whatsappNumber = '5533998351903';
+    const whatsappNumber = '5533991975298';
     
     if (!paymentMethod) {
         showNotification('Por favor, selecione uma forma de pagamento!', 'error');
