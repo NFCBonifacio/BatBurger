@@ -16,7 +16,7 @@
 
     <header>
         <div class="bat-logo">
-            <img src="https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/transferir.webp" width="80" loading="lazy">
+            <img src="https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/transferir.webp" alt="Logo do BatBurger" width="80" loading="lazy">
         </div>
         <h1>BAT<span>BURGER</span></h1>
         <p>🍔 O único delivery que te salva da fome até na madrugada! 🦇</p>
@@ -33,7 +33,7 @@
 
             <div class="menu-items-container">
                 <div class="item" style="--order: 1;">
-                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/hamburguer.webp?raw=true')" role="img" aria-label="Hambúrguer Simples"></div>
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/hamburguer.webp')" role="img" aria-label="Hambúrguer Simples"></div>
                     <h3>Hambúrguer Simples</h3>
                     <p>Pão, bife, alface, tomate, milho e batata palha.</p>
                     <span class="price">R$ 11,90</span>
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="item" style="--order: 2;">
-                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xburguer.webp?raw=true')" role="img" aria-label="X-Burger"></div>
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xburguer.webp')" role="img" aria-label="X-Burger"></div>
                     <h3>X-Burger</h3>
                     <p>Pão, bife, queijo, batata palha, milho, alface e tomate.</p>
                     <span class="price">R$ 12,90</span>
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="item" style="--order: 3;">
-                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xegg.webp?raw=true')" role="img" aria-label="X-Egg"></div>
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xegg.webp')" role="img" aria-label="X-Egg"></div>
                     <h3>X-Egg</h3>
                     <p>Pão, bife, queijo, ovo, batata palha, milho e tomate.</p>
                     <span class="price">R$ 12,90</span>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="item" style="--order: 4;">
-                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xbacon.webp?raw=true')" role="img" aria-label="X-Bacon"></div>
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xbacon.webp')" role="img" aria-label="X-Bacon"></div>
                     <h3>X-Bacon</h3>
                     <p>Pão, bife, queijo, bacon, batata palha, milho, alface e tomate.</p>
                     <span class="price">R$ 13,90</span>
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="item" style="--order: 5;">
-                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/eggbacon.webp?raw=true')" role="img" aria-label="X-Egg Bacon"></div>
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/eggbacon.webp')" role="img" aria-label="X-Egg Bacon"></div>
                     <h3>X-Egg Bacon</h3>
                     <p>Pão, bife, queijo, bacon, ovo, batata palha, milho, alface e tomate.</p>
                     <span class="price">R$ 14,90</span>
@@ -73,14 +73,31 @@
                 </div>
 
                 <div class="item" style="--order: 6;">
-                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xtudo.webp?raw=true')" role="img" aria-label="X-Tudo"></div>
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/xtudo.webp')" role="img" aria-label="X-Tudo"></div>
                     <h3>X-Tudo</h3>
                     <p>Pão, bife, calabresa, ovo, bacon, presunto, alface, banana, tomate, milho, batata palha e molho especial.</p>
                     <span class="price">R$ 17,90</span>
                     <button onclick="addToCart('X-Tudo', 17.90)" aria-label="Adicionar X-Tudo ao carrinho">PEDIR AGORA</button>
                 </div>
 
-             
+                <!-- Adicionando bebidas -->
+                <div class="item" style="--order: 7;">
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/refrigerante.webp')" role="img" aria-label="Refrigerante"></div>
+                    <h3>Refrigerante</h3>
+                    <p>Lata 350ml - Coca-Cola, Guaraná, Fanta ou Sprite</p>
+                    <span class="price">R$ 5,00</span>
+                    <button onclick="addToCart('Refrigerante', 5.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
+                </div>
+
+                <div class="item" style="--order: 8;">
+                    <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/suco.webp')" role="img" aria-label="Suco Natural"></div>
+                    <h3>Suco Natural</h3>
+                    <p>300ml - Laranja, Abacaxi ou Maracujá</p>
+                    <span class="price">R$ 5,00</span>
+                    <button onclick="addToCart('Suco Natural', 5.00)" aria-label="Adicionar Suco Natural ao carrinho">PEDIR AGORA</button>
+                </div>
+            </div>
+        </div>
 
         <div class="cart">
             <h2>🛒 SEU PEDIDO <span id="cart-count">(0)</span></h2>
@@ -116,7 +133,7 @@
             <div class="payment-method">
                 <h2>💳 FORMA DE PAGAMENTO</h2>
                 <div id="payment-warning" class="payment-warning" style="display: none;">
-                    <p><i class="fas fa-exclamation-triangle"></i> Após meia-noite, não aceitamos pagamento em dinheiro.</p>
+                    <p><i class="fas fa-exclamation-triangle"></i> Taxa noturna: R$ 6,00 (após meia-noite). Não aceitamos dinheiro após meia-noite.</p>
                 </div>
                 <div class="payment-options">
                     <div class="payment-option">
@@ -194,9 +211,11 @@
         <div class="about-section">
             <h2>🦇 SOBRE NÓS</h2>
             <p>O BatBurger surgiu para trazer os melhores hambúrgueres artesanais da região. Nosso compromisso é com qualidade e sabor.</p>
-            <p>🕒 Funcionamento: Todos os dias, das 21h às 3h</p>
+            <p>🕒 Funcionamento: Quarta a Segunda, das 21h às 3h</p>
+            <p>🚫 Fechado às Terças-feiras</p>
+            <p>🚚 Promoção: Entrega grátis nas segundas até meia-noite!</p>
             <p>📍 Entregamos em toda região</p>
-            <p>💰 Taxa de entrega: R$ 4,00 (até meia-noite) | R$ 8,00 (após meia-noite)</p>
+            <p>💰 Taxa de entrega: R$ 4,00 (até meia-noite) | R$ 6,00 (após meia-noite)</p>
         </div>
     </main>
 
