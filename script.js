@@ -16,23 +16,46 @@ document.addEventListener('DOMContentLoaded', function() {
     const backToTopButton = document.getElementById('back-to-top');
     const whatsappNumber = '5533998351903';
     
-    // Verificar horário de funcionamento e definir taxa de entrega
+    // Verificar horário e dia de funcionamento
     const now = new Date();
     const currentHour = now.getHours();
+    const currentDay = now.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
     const isAfterMidnight = currentHour >= 0 && currentHour < 3;
-    const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
+    const isTuesday = currentDay === 2;
+    const isMondayBeforeMidnight = currentDay === 1 && !isAfterMidnight;
     
-    if (currentHour < 21 && currentHour > 3) {
-        showNotification('Estamos fechados no momento. Funcionamos das 21h às 3h.', 'warning');
+    // Verificar se está fechado (terça ou fora do horário)
+    const isClosed = isTuesday || (currentHour < 21 || currentHour >= 3);
+    
+    // Taxa de entrega (grátis na segunda até meia-noite)
+    let deliveryFee = isMondayBeforeMidnight ? 0 : (isAfterMidnight ? 6.00 : 4.00);
+    
+    if (isClosed) {
+        let message = 'Estamos fechados no momento. ';
+        if (isTuesday) {
+            message += 'Funcionamos de Quarta a Segunda, das 21h às 3h.';
+        } else {
+            message += 'Funcionamos das 21h às 3h.';
+        }
+        showNotification(message, 'warning');
     }
     
     // Atualizar taxa de entrega
-    deliveryFeeElement.textContent = `Taxa de entrega: R$ ${deliveryFee.toFixed(2)}`;
+    updateDeliveryFeeDisplay();
     updateTotalWithDelivery();
     
     // Mostrar aviso se for após meia-noite
     if (isAfterMidnight) {
         paymentWarning.style.display = 'block';
+    }
+
+    // Função para atualizar a exibição da taxa de entrega
+    function updateDeliveryFeeDisplay() {
+        if (isMondayBeforeMidnight) {
+            deliveryFeeElement.textContent = 'Taxa de entrega: GRÁTIS (Promoção Segunda)';
+        } else {
+            deliveryFeeElement.textContent = `Taxa de entrega: R$ ${deliveryFee.toFixed(2)} ${isAfterMidnight ? '(taxa noturna)' : ''}`;
+        }
     }
 
     // Configurar listeners para os métodos de pagamento
@@ -183,9 +206,16 @@ function updateCartDisplay() {
         // Atualizar taxa de entrega
         const now = new Date();
         const currentHour = now.getHours();
+        const currentDay = now.getDay();
         const isAfterMidnight = currentHour >= 0 && currentHour < 3;
-        const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
-        deliveryFeeElement.textContent = `Taxa de entrega: R$ ${deliveryFee.toFixed(2)}`;
+        const isMondayBeforeMidnight = currentDay === 1 && !isAfterMidnight;
+        const deliveryFee = isMondayBeforeMidnight ? 0 : (isAfterMidnight ? 6.00 : 4.00);
+        
+        if (isMondayBeforeMidnight) {
+            deliveryFeeElement.textContent = 'Taxa de entrega: GRÁTIS (Promoção Segunda)';
+        } else {
+            deliveryFeeElement.textContent = `Taxa de entrega: R$ ${deliveryFee.toFixed(2)} ${isAfterMidnight ? '(taxa noturna)' : ''}`;
+        }
         
         // Atualizar total com entrega
         const totalWithDelivery = total + deliveryFee;
@@ -200,8 +230,10 @@ function updateTotalWithDelivery() {
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const now = new Date();
     const currentHour = now.getHours();
+    const currentDay = now.getDay();
     const isAfterMidnight = currentHour >= 0 && currentHour < 3;
-    const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
+    const isMondayBeforeMidnight = currentDay === 1 && !isAfterMidnight;
+    const deliveryFee = isMondayBeforeMidnight ? 0 : (isAfterMidnight ? 6.00 : 4.00);
     const totalWithDelivery = total + deliveryFee;
     
     document.getElementById('total-with-delivery').textContent = `Total com entrega: R$ ${totalWithDelivery.toFixed(2)}`;
@@ -250,7 +282,15 @@ function sendOrder() {
     // Verificar se é após meia-noite e tentativa de pagamento em dinheiro
     const now = new Date();
     const currentHour = now.getHours();
+    const currentDay = now.getDay();
     const isAfterMidnight = currentHour >= 0 && currentHour < 3;
+    const isTuesday = currentDay === 2;
+    const isClosed = isTuesday || (currentHour < 21 || currentHour >= 3);
+    
+    if (isClosed) {
+        showNotification('Estamos fechados no momento. Funcionamos de Quarta a Segunda, das 21h às 3h.', 'error');
+        return;
+    }
     
     if (isAfterMidnight && paymentMethod.value === 'dinheiro') {
         showNotification('Não aceitamos dinheiro após meia-noite. Por favor, escolha outra forma de pagamento.', 'error');
@@ -284,7 +324,8 @@ function sendOrder() {
     
     // Calcular total
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const deliveryFee = isAfterMidnight ? 8.00 : 4.00;
+    const isMondayBeforeMidnight = currentDay === 1 && !isAfterMidnight;
+    const deliveryFee = isMondayBeforeMidnight ? 0 : (isAfterMidnight ? 6.00 : 4.00);
     const totalWithDelivery = total + deliveryFee;
     
     // Montar mensagem
@@ -299,7 +340,13 @@ function sendOrder() {
     });
     
     message += `\n*Subtotal: R$ ${total.toFixed(2)}*\n`;
-    message += `*Taxa de entrega: R$ ${deliveryFee.toFixed(2)} ${isAfterMidnight ? '(taxa noturna)' : ''}*\n`;
+    
+    if (isMondayBeforeMidnight) {
+        message += `*Taxa de entrega: GRÁTIS (Promoção Segunda)*\n`;
+    } else {
+        message += `*Taxa de entrega: R$ ${deliveryFee.toFixed(2)} ${isAfterMidnight ? '(taxa noturna)' : ''}*\n`;
+    }
+    
     message += `*Total: R$ ${totalWithDelivery.toFixed(2)}*\n\n`;
     message += `*FORMA DE PAGAMENTO:* ${getPaymentMethodName(paymentMethod.value)}\n`;
     
