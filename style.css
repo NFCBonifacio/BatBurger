@@ -1,5 +1,5 @@
 /* style.css */
-/* Estilo Gotham City - Versão Simplificada */
+/* Estilo Gotham City - Versão Atualizada */
 :root {
     --primary-color: #ffd700;
     --secondary-color: #1a1a1a;
@@ -9,6 +9,7 @@
     --card-bg: rgba(30, 30, 30, 0.9);
     --header-bg: rgba(20, 20, 20, 0.8);
     --overlay: rgba(0, 0, 0, 0.7);
+    --delivery-free: #4CAF50;
 }
 
 * {
@@ -313,6 +314,10 @@ button:focus {
     color: var(--text-color);
     text-align: right;
     margin: 5px 0;
+}
+
+#delivery-fee.free {
+    color: var(--delivery-free);
 }
 
 #total-with-delivery {
@@ -660,6 +665,12 @@ textarea:focus {
 
 .about-section p {
     margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.about-section p:before {
+    content: "• ";
+    color: var(--primary-color);
 }
 
 .closed-message {
