@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const pixArea = document.getElementById('pix-area');
     const paymentWarning = document.getElementById('payment-warning');
     const backToTopButton = document.getElementById('back-to-top');
-    const whatsappNumber = '5533998351903';
+    const whatsappNumber = '5533991975298';
     
     // Verificar horário e dia de funcionamento
     const now = new Date();
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const isMondayBeforeMidnight = currentDay === 1 && !isAfterMidnight;
     
     // Verificar se está fechado (terça ou fora do horário)
-    const isClosed = isTuesday || (currentHour < 21 || currentHour >= 3);
+    const isClosed = isTuesday || (currentHour < 20 || currentHour >= 3);
     
     // Taxa de entrega (grátis na segunda até meia-noite)
     let deliveryFee = isMondayBeforeMidnight ? 0 : (isAfterMidnight ? 6.00 : 4.00);
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isTuesday) {
             message += 'Funcionamos de Quarta a Segunda, das 21h às 3h.';
         } else {
-            message += 'Funcionamos das 21h às 3h.';
+            message += 'Funcionamos das 20h às 3h.';
         }
         showNotification(message, 'warning');
     }
