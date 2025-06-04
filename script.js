@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const now = new Date();
     const currentHour = now.getHours();
     const currentDay = now.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
-    const isAfterMidnight = currentHour >= 0 && currentHour < 3;
+    const isAfterMidnight = currentHour >= 20 && currentHour < 3;
     const isTuesday = currentDay === 2;
     const isMondayBeforeMidnight = currentDay === 1 && !isAfterMidnight;
     
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isClosed) {
         let message = 'Estamos fechados no momento. ';
         if (isTuesday) {
-            message += 'Funcionamos de Quarta a Segunda, das 21h às 3h.';
+            message += 'Funcionamos de Quarta a Segunda, das 20h às 3h.';
         } else {
             message += 'Funcionamos das 20h às 3h.';
         }
