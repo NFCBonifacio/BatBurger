@@ -26,6 +26,10 @@
     </header>
 
     <main id="main-content">
+        <div id="closed-message" class="closed-message" style="display: none;">
+            <p>Estamos fechados no momento. Funcionamos de Quarta a Domingo, das 20h às 3h.</p>
+        </div>
+
         <div class="menu">
             <div class="section-title">
                 <h2>🦇 CARDÁPIO</h2>
@@ -79,47 +83,54 @@
                     <span class="price">R$ 17,90</span>
                     <button onclick="addToCart('X-Tudo', 17.90)" aria-label="Adicionar X-Tudo ao carrinho">PEDIR AGORA</button>
                 </div>
-
-                <!-- Adicionando bebidas -->
+<div class="item" style="--order: 6;">
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BatBurger/blob/main/DuploCheese.png?raw=true')" role="img" aria-label="Duplo Cheese"></div>
+                    <h3>Dluplo Cheese</h3>
+                    <p>Pão ,2 bifes,2 queijo, calabresa,milho tomate, batata palha, alface e molho especial.</p>
+                    <span class="price">R$ 17,90</span>
+                    <button onclick="addToCart('Duplo Cheese', 17.90)" aria-label="Adicionar Duplo Cheese ao carrinho">PEDIR AGORA</button>
+                </div>
+                <div class="item" style="--order: 6;">
+                    <div class="item-img" style="background-image: url('https://github.com/NFCBonifacio/BatBurger/blob/main/DuploBacon.png?raw=true')" role="img" aria-label="Duplo Bacon"></div>
+                    <h3>Duplo Bacon</h3>
+                    <p>Pão ,2 bifes, queijo, 2 bacon,milho tomate, picles ,batata palha, alface e molho especial.</p>
+                    <span class="price">R$ 19,90</span>
+                    <button onclick="addToCart('Duplo Bacon', 19.90)" aria-label="Adicionar Duplo Bacon ao carrinho">PEDIR AGORA</button>
+                </div>
                 <div class="item" style="--order: 7;">
                     <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/coca_lata_600x400.webp')" role="img" aria-label="Refrigerante"></div>
                     <h3>Refrigerante</h3>
-                    <p>Lata 350ml - Coca-Cola </p>
+                    <p>Lata 350ml - Coca-Cola</p>
                     <span class="price">R$ 6,00</span>
-                    <button onclick="addToCart('Refrigerante', 6.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
+                    <button onclick="addToCart('Refrigerante (Coca-Cola Lata)', 6.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
                 </div>
 
-            
-              <div class="item" style="--order: 7;">
+                <div class="item" style="--order: 8;">
                     <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/pepsi_600x400.webp')" role="img" aria-label="Refrigerante"></div>
                     <h3>Refrigerante</h3>
-                    <p>Lata 350ml - Pepsi </p>
+                    <p>Lata 350ml - Pepsi</p>
                     <span class="price">R$ 5,00</span>
-                    <button onclick="addToCart('Refrigerante', 5.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
+                    <button onclick="addToCart('Refrigerante (Pepsi Lata)', 5.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
                 </div>
 
-                   <div class="item" style="--order: 7;">
+                <div class="item" style="--order: 9;">
                     <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/coca_600x400.webp')" role="img" aria-label="Refrigerante"></div>
                     <h3>Refrigerante</h3>
-                    <p> 2L - Coca-Cola </p>
+                    <p>2L - Coca-Cola</p>
                     <span class="price">R$ 15,00</span>
-                    <button onclick="addToCart('Refrigerante', 15.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
+                    <button onclick="addToCart('Refrigerante (Coca-Cola 2L)', 15.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
                 </div>
 
-               <div class="item" style="--order: 7;">
+                <div class="item" style="--order: 10;">
                     <div class="item-img" style="background-image: url('https://raw.githubusercontent.com/NFCBonifacio/BatBurger/refs/heads/main/kuat_600x400.webp')" role="img" aria-label="Refrigerante"></div>
                     <h3>Refrigerante</h3>
-                    <p> 2L - KUAT GUARANÁ </p>
-                    <span class="price">R$ 11,00</span>
-                    <button onclick="addToCart('Refrigerante', 11.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
-               </div>
-          
+                    <p>2L - KUAT GUARANÁ</p>
+                    <span class="price">R$ 12,00</span>
+                    <button onclick="addToCart('Refrigerante (Kuat 2L)', 12.00)" aria-label="Adicionar Refrigerante ao carrinho">PEDIR AGORA</button>
+                </div>
+            </div>
+        </div>
 
-                 
-
-                  </div>
-
-          
         <div class="cart">
             <h2>🛒 SEU PEDIDO <span id="cart-count">(0)</span></h2>
             <div id="cart-empty" class="cart-empty">
@@ -154,7 +165,7 @@
             <div class="payment-method">
                 <h2>💳 FORMA DE PAGAMENTO</h2>
                 <div id="payment-warning" class="payment-warning" style="display: none;">
-                    <p><i class="fas fa-exclamation-triangle"></i> Taxa noturna: R$ 6,00 (após meia-noite). Não aceitamos dinheiro após meia-noite.</p>
+                    <p><i class="fas fa-exclamation-triangle"></i> Taxa noturna: R$ 7,00 (após meia-noite). Não aceitamos dinheiro após meia-noite.</p>
                 </div>
                 <div class="payment-options">
                     <div class="payment-option">
@@ -232,11 +243,10 @@
         <div class="about-section">
             <h2>🦇 SOBRE NÓS</h2>
             <p>O BatBurger surgiu para trazer os melhores hambúrgueres artesanais da região. Nosso compromisso é com qualidade e sabor.</p>
-            <p>🕒 Funcionamento: Quarta a Segunda, das 21h às 3h</p>
-            <p>🚫 Fechado às Terças-feiras</p>
-            <p>🚚 Promoção: Entrega grátis nas segundas até meia-noite!</p>
+            <p>🕒 Funcionamento: Quarta a Domingo, das 20h às 3h</p>
+            <p>🚫 Fechado às Segundas e Terças-feiras</p>
+            <p>🚚 Taxa de entrega: R$ 4,00 (até meia-noite) | R$ 7,00 (após meia-noite)</p>
             <p>📍 Entregamos em toda região</p>
-            <p>💰 Taxa de entrega: R$ 4,00 (até meia-noite) | R$ 6,00 (após meia-noite)</p>
         </div>
     </main>
 
