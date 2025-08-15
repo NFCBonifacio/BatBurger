@@ -339,7 +339,7 @@ function sendOrder() {
     const encodedMessage = encodeURIComponent(message);
     
     // Número de WhatsApp (substitua pelo número real)
-    const whatsappNumber = '5533999999999';
+    const whatsappNumber = '5533991975298';
     
     // Abre o WhatsApp
     window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
